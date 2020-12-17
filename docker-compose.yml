@@ -11,8 +11,6 @@ services:
     environment: 
       - NODE_ENV=prod
       - SERVER_PORT=3001
-      - LAYER1_URL=ws://64.227.57.97:9944
-      - LAYER1_ACCOUNT=Alice
     command: "node index.js"
     
   frontend:

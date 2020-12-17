@@ -1,0 +1,29 @@
+$main_width: 1140px;
+
+
+
+.bg_1{
+  background: #fff;
+}
+.bg_2{
+  background: rgb(53, 166, 150);
+}
+
+.fc_1{
+  color: #000;
+}
+.fc_2{
+  color: #555;
+}
+.fc_3{
+  color: rgb(53, 166, 150);
+}
+.fc_4{
+  color: #9c9c9c;
+}
+
+.flex-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
