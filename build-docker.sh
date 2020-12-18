@@ -12,5 +12,5 @@ docker build . -t tearust/gluon-website-frontend:$tag
 cd ..
 echo docker push
 
-docker push tearust/gluon-website-backend:$tag
+docker push tearust/gluon-website-frontend:$tag
 docker push tearust/gluon-website-backend:$tag
