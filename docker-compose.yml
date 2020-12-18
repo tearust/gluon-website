@@ -16,7 +16,7 @@ services:
   frontend:
     image: tearust/gluon-website-frontend:latest
     container_name: frontend
-    volumes:
+    # volumes:
       # - /letsencrypt:/etc/letsencrypt
     ports:
       - 80:80
