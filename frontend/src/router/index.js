@@ -52,7 +52,7 @@ export default new Router({
         },
       ]
     },
-    
+
     // {
     //   path: '/doc_content/:doc_path',
     //   name: 'doc_content',
