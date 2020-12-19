@@ -1,4 +1,4 @@
-tag=latest
+tag=0.1
 echo building backend..
 cd backend
 echo building docker backend...
