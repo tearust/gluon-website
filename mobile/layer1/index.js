@@ -1,6 +1,6 @@
 
 import { ApiPromise, Keyring, WsProvider } from '@polkadot/api';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
+import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
 import _ from 'lodash';
 import types from './types';
 const rpc = require('./rpc');
@@ -48,6 +48,15 @@ export default class Layer1 {
       this.handle_events(events)
     });
 
+  }
+
+  mnemonicGenerate(){
+    return mnemonicGenerate();
+  }
+  generateNewAccount(mnemonic){
+    const keyring = new Keyring({ type: 'sr25519' })
+    const ac = keyring.addFromUri(mnemonic);
+    return ac;
   }
 
   buildCallback(key, cb){
