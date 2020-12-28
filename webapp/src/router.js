@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 
 import Home from './views/Home';
+import PairWithMobile from './views/PairWithMobile';
 
 Vue.use(Router);
 
@@ -16,6 +17,11 @@ let routers = [
     name: 'home',
     component: Home
   },
+  {
+    path: '/pair-with-mobile',
+    name: 'pair-with-mobile',
+    component: PairWithMobile
+  }
   
 ];
 

@@ -26,7 +26,7 @@ export default class extends Base {
     }
   }
   _init(){
-    this.layer1 = new Layer1();
+    
   }
   renderMain(p, s){
 
@@ -60,7 +60,8 @@ export default class extends Base {
   }
 
   async scanQrCodeHandler(){
-    const nodes = await this.layer1.getBootstrapNodes();
+    const layer1 = await Layer1.get();
+    const nodes = await layer1.getBootstrapNodes();
     // alert(JSON.stringify(nodes));
     this.setState({
       nodes: nodes
@@ -70,7 +71,7 @@ export default class extends Base {
   async componentDidMount(){
     UI.loading(true);
 
-    await this.layer1.init();
+    await Layer1.get();
 
     UI.loading(false);
   }

@@ -5,9 +5,10 @@ import {TabBarIcon, TabBarText} from '../components/TabBar';
 import BtcHome from '../screens/btc/Home';
 
 import ProfileHome from '../screens/profile/index';
+import Test from '../screens/profile/test';
 
 export default {
-  init_tab: 'tab_btc',
+  init_tab: 'tab_test',
   tab : [
     {
       name: 'tab_btc',
@@ -30,6 +31,14 @@ export default {
       component: ProfileHome,
       options: {
         title: ({ focused })=><TabBarText text={'Profile'} focused={focused} />,
+        tabBarIcon: ({ focused }) => <TabBarIcon size={21} focused={focused} name="user-o" />
+      }
+    },
+    {
+      name: 'tab_test',
+      component: Test,
+      options: {
+        title: ({ focused })=><TabBarText text={'Test'} focused={focused} />,
         tabBarIcon: ({ focused }) => <TabBarIcon size={21} focused={focused} name="user-o" />
       }
     },

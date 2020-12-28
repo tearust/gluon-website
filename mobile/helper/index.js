@@ -6,6 +6,8 @@ import UI from './UI';
 import cache from './cache';
 import native from './native';
 import request from './request';
+import Btc from './Btc';
+import crypto from './crypto';
 
 
 const init = (param)=>{
@@ -30,4 +32,6 @@ export {
 	cache,
 	native,
 	request,
+	Btc,
+	crypto,
 };

@@ -6,17 +6,21 @@
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
       <router-view v-if="!$route.meta.keepAlive"></router-view>
+      
     </section>
     
+    <PageFooter />
   </div>
 </template>
 
 <script>
 import PageHeader from './components/PageHeader';
+import PageFooter from './components/PageFooter';
 
 export default {
   components: {
-    PageHeader
+    PageHeader,
+    PageFooter,
   }
 }
 </script>

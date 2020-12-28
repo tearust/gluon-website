@@ -10,7 +10,19 @@ import forge from 'node-forge';
 
 const LAYER1_URL = 'ws://81.70.96.136:9944';
 
-export default class {
+let _layer1 = null;
+export default class Layer1 {
+  static get = async ()=>{
+    if(_layer1){
+      return _layer1;
+    }
+
+    _layer1 = new Layer1();
+    await _layer1.init();
+    return _layer1;
+  };
+
+
   constructor(){
     this.api = null;
     this.callback = {};
@@ -35,7 +47,7 @@ export default class {
     this.api.query.system.events((events) => {
       this.handle_events(events)
     });
-    alert(11);
+
   }
 
   buildCallback(key, cb){

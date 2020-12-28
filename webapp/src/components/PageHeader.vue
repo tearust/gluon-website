@@ -14,7 +14,7 @@
   
 
   <el-menu-item>
-    <a href="http://tearust.com/" target="_blank">WEBSITE</a>
+    <!-- <a href="http://tearust.com/" target="_blank">WEBSITE</a> -->
   </el-menu-item>
   
 </el-menu>
