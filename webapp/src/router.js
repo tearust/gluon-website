@@ -10,12 +10,14 @@ Vue.use(Router);
 import utils from './tea/utils';
 
 
-
 let routers = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: {
+      needLogin: true
+    }
   },
   {
     path: '/pair-with-mobile',
