@@ -1,8 +1,12 @@
 <template>
 <div class="tea-page">
-  <h4>Test Page</h4>
+  <!-- <h4>Test Page</h4> -->
+
   <el-button type="primary" @click="showQrCode()">SHOW QR CODE</el-button>
 
+  <el-divider />
+
+  <el-button type="primary" @click="showQrCode()">GET PROFILE</el-button>
 
 </div>
 </template>
