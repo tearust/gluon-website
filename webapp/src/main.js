@@ -16,13 +16,11 @@ Vue.config.productionTip = false;
 
 
 
-router.beforeEach((to, from, next)=>{
-  console.log(to);
-  
+router.beforeEach((to, from, next)=>{  
   if(to.meta && to.meta.needLogin){
-    const {account} = store.state;
-    if(!account){
-      next({path: '/pair-with-mobile'})
+    const {layer1_account} = store.getters;
+    if(!layer1_account){
+      next({path: '/login_account'})
     }
   }
 
@@ -38,10 +36,11 @@ new Vue({
     loading(f, text='Loading...'){
       if(f){
         C._loading = Loading.service({
-          fullscreen: true,
-          text,
-          background: 'rgba(0, 0, 0, 0.7)',
-          customClass: 'tea-loading'
+          lock: true,
+          text: 'Loading...',
+          customClass: 'c-fullscreen-loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
         });
       }
       else{

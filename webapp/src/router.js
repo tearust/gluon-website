@@ -4,6 +4,7 @@ import Router from 'vue-router'
 
 import Home from './views/Home';
 import PairWithMobile from './views/PairWithMobile';
+import LoginAccount from './views/LoginAccount';
 
 Vue.use(Router);
 
@@ -18,6 +19,11 @@ let routers = [
     meta: {
       needLogin: true
     }
+  },
+  {
+    path: '/login_account',
+    name: 'login_account',
+    component: LoginAccount,
   },
   {
     path: '/pair-with-mobile',

@@ -9,9 +9,10 @@ import BN from 'bn.js';
 
 const { Protobuf, stringToU8, u8ToString } = proto;
 
+let _layer1 = null;
 export default class {
   constructor() {
-    this.layer1 = null;
+    this.layer1 = _layer1;
     this._log = Log.create(this.defineLog());
   }
 
@@ -29,6 +30,7 @@ export default class {
         this.layer1 = new Layer1();
         await this.layer1.init();
 
+        _layer1 = this.layer1;
       } catch (e) {
         console.error(e);
       }
