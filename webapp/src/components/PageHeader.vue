@@ -16,6 +16,7 @@
   
   <el-menu-item style="margin-left: 50px;" index="/login_account" v-if="layer1_account">{{layer1_account.name}}</el-menu-item>
 
+  <el-menu-item index="/test">{{'Test'}}</el-menu-item>
   <el-menu-item index="/">{{'Home'}}</el-menu-item>
     
     <!-- <a href="http://tearust.com/" target="_blank">WEBSITE</a> -->

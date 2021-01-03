@@ -5,6 +5,7 @@ import Router from 'vue-router'
 import Home from './views/Home';
 import PairWithMobile from './views/PairWithMobile';
 import LoginAccount from './views/LoginAccount';
+import Test from './views/Test';
 
 Vue.use(Router);
 
@@ -29,6 +30,14 @@ let routers = [
     path: '/pair-with-mobile',
     name: 'pair-with-mobile',
     component: PairWithMobile
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: Test,
+    meta: {
+      needLogin: true
+    }
   }
   
 ];

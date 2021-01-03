@@ -3,6 +3,7 @@ import _ from 'lodash';
 import http from './http';
 import proto from './proto';
 import types from './types';
+import Pubsub from 'pubsub-js';
 
 import forge from 'node-forge';
 
@@ -184,6 +185,10 @@ const F = {
     console.log(JSON.stringify(types));
   },
   bootstrapNodesList,
+
+  publish(msg, data){
+    Pubsub.publish(msg, data);
+  }
 };
 
 window.utils = F;

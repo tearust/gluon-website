@@ -10,17 +10,21 @@
     </section>
     
     <PageFooter />
+
+    <QRCodeModal />
   </div>
 </template>
 
 <script>
 import PageHeader from './components/PageHeader';
 import PageFooter from './components/PageFooter';
+import QRCodeModal from './components/QRCodeModal';
 
 export default {
   components: {
     PageHeader,
     PageFooter,
+    QRCodeModal,
   }
 }
 </script>

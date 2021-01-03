@@ -7,6 +7,8 @@ import http from '../tea/http';
 import toHex from 'to-hex';
 import BN from 'bn.js';
 
+
+
 const { Protobuf, stringToU8, u8ToString } = proto;
 
 let _layer1 = null;
@@ -36,6 +38,16 @@ export default class {
       }
     }
   }
+
+  showQrCode(opts){
+    utils.publish('tea-qrcode-modal', {
+      visible: true,
+      text: opts.text,
+    });
+    
+  }
+
+  
 
   
 }
