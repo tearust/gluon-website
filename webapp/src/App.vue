@@ -12,19 +12,23 @@
     <PageFooter />
 
     <QRCodeModal />
+    <SelectLayer1Modal />
   </div>
 </template>
 
 <script>
 import PageHeader from './components/PageHeader';
 import PageFooter from './components/PageFooter';
+
 import QRCodeModal from './components/QRCodeModal';
+import SelectLayer1Modal from './components/SelectLayer1Modal';
 
 export default {
   components: {
     PageHeader,
     PageFooter,
     QRCodeModal,
+    SelectLayer1Modal,
   }
 }
 </script>

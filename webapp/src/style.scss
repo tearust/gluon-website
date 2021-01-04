@@ -1,3 +1,5 @@
+$mainColor: #35a696;
+
 html, body{
   margin: 0;
   padding: 0;
@@ -8,6 +10,24 @@ html, body{
 a, a:hover, a:focus, button:focus {
   text-decoration: none;
   outline: none !important;
+}
+
+.flex-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.v-center{
+
+}
+.h-center{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mb{
+  margin-bottom: 20px;
 }
 
 .c-fullscreen-loading{
@@ -32,7 +52,8 @@ a, a:hover, a:focus, button:focus {
 
 .tea-page{
   text-align: left;
-  min-height: 280px;
+  min-height: calc(100vh - 327px);
+  
 
   .el-table__body{
     cursor: pointer;
@@ -69,3 +90,8 @@ a, a:hover, a:focus, button:focus {
     justify-content: center;
   }
 }
+
+
+
+
+@import './css/tea-card.scss';

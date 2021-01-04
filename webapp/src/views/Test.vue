@@ -6,7 +6,9 @@
 
   <el-divider />
 
-  <el-button type="primary" @click="showQrCode()">GET PROFILE</el-button>
+  <el-button type="primary" @click="showSelectLayer1()">SELECT LAYER1</el-button>
+
+  <el-divider />
 
 </div>
 </template>
@@ -28,9 +30,12 @@ export default {
 
   methods: {
     showQrCode(){
-      this.test.showQrCode({
+      this.test.showQrCodeModal({
         text: 'jacky.li'
       })
+    },
+    showSelectLayer1(){
+      this.test.showSelectLayer1Modal(true);
     }
   }
 }

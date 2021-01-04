@@ -39,12 +39,16 @@ export default class {
     }
   }
 
-  showQrCode(opts){
+  showQrCodeModal(opts){
     utils.publish('tea-qrcode-modal', {
       visible: true,
       text: opts.text,
     });
     
+  }
+
+  showSelectLayer1Modal(){
+    utils.publish('tea-select-layer1-modal', true);
   }
 
   

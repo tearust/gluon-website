@@ -1,20 +1,56 @@
 <template>
-<div class="tea-page">
+<div class="tea-page h-center">
 
-  <h4>Current Layer1 Account</h4>
-  <p v-if="layer1_account">{{layer1_account.name}}</p>
-  <p v-if="layer1_account">{{layer1_account.address}}</p>
+  <div class="tea-card">
+    <i class="x-icon el-icon-user"></i>
+
+    <div class="x-list">
+      <div class="x-item">
+        <b>NAME</b>
+        <span>{{layer1_account ? layer1_account.name : ''}}</span>
+      </div>
+      <div class="x-item">
+        <b>ADDRESS</b>
+        <span>{{layer1_account ? layer1_account.address : ''}}</span>
+      </div>
+      <div class="x-item">
+        <b>BALANCE</b>
+        <span>{{layer1_account ? layer1_account.balance : ''}}</span>
+      </div>
+
+    </div>
+
+    <div class="x-right">
+      <el-button @click="showSelectLayer1()">CHANGE</el-button>
+    </div>
+  </div>
+
   <el-divider />
-  <h4>Setting Your Layer1 Account</h4>
 
-  <el-select style="width: 400px;" :value="layer1_account ? layer1_account.address : null" @change="layer1ChangeHandler($event)" placeholder="Please select account">
-    <el-option
-      v-for="(item, i) in layer1_account_list"
-      :key="i"
-      :label="item.name"
-      :value="item.address">
-    </el-option>
-  </el-select>
+  <div class="tea-card mb">
+    <i class="x-icon el-icon-mobile-phone"></i>
+
+    <div class="x-list">
+      <div class="x-item">
+        <b>UUID</b>
+        <span>{{bind_mobile ? bind_mobile.uuid : ''}}</span>
+      </div>
+      <div class="x-item">
+        <b>ADDRESS</b>
+        <span>{{bind_mobile ? bind_mobile.address : ''}}</span>
+      </div>
+
+    </div>
+
+    <div class="x-right">
+      <el-button class="gray" >UNPAIR</el-button>
+    </div>
+  </div>
+
+  <div class="tea-card flex-center gray">
+    <el-button class="x-only-btn">BIND MOBILE</el-button>
+  </div>
+  
 </div>
 </template>
 <script>
@@ -24,40 +60,32 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   data(){
     return {
-      layer1_account_list: [],
+      
     };
   },
 
   computed: {
     ...mapGetters([
       'layer1_account'
+    ]),
+    ...mapState([
+      'bind_mobile'
     ])
   },
   
   async mounted(){
     this.$root.loading(true);
+
     this.sa = new SettingAccount();
     await this.sa.init();
-
-    let tmp = await this.sa.getAllLayer1Account();
-    tmp = _.map(tmp, (item)=>{
-      (async ()=>{
-        item.balance = await this.sa.layer1.getAccountBalance(item.address);
-        item.ori_name = _.clone(item.name);
-        item.name = item.name + '  -  ' + item.balance;
-      })();
-      return item;
-    });
-    this.layer1_account_list = await tmp;
 
     this.$root.loading(false);
 
   },
 
   methods: {
-    layer1ChangeHandler(account){
-      const ac = _.find(this.layer1_account_list, (item)=>item.address === account);
-      this.$store.commit('set_account', ac);
+    showSelectLayer1(){
+      this.sa.showSelectLayer1Modal();
     }
   }
 }
