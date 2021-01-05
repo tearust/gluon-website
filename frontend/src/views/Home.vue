@@ -6,11 +6,12 @@
 
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 24px 0 40px; margin: 0 auto; max-width: 800px;">
     <h1 style="font-size: 52px; color: #444;font-weight: bold; text-align:center; line-height:60px;">
-      Gluon (Distributed hardware wallet)— Yet another crypto wallet? Why? What’s new?
+      Gluon 
     </h1>
     <p style="font-size: 23px; color: #111; text-align:center; line-height: 28px; margin-top: 15px;">
+      Decentralized Hardware Crypto Wallet Services. <br/>
+      Never lost or leak your private keys again!
       
-      Gluno is NOT a wallet (although it is called Gluon Wallet), it is actually a <b>Trust-as-a-Service (TaaS)</b> application focus on crypto keys.
     </p>
 
     <!-- <p class="m-11">
@@ -21,96 +22,123 @@
   </div>
 
   <div class="c-md">
+    <h1>
+      Leaking or losing private keys are the primary concerns of most blockchain users. Gluon uses a new approach to prevent such issues.
+    </h1>
+    <img src="http://teaproject.org:3001/res/blog/0_0bAHj5-yVwAyoZTJ.png"/>
+    <p>
+      More than US$11 billion has been stolen from supposedly secure crypto exchanges, wallets and mining platforms, mostly due to hacking incidents, between 2011-2020. A cryptocurrency analyst, Timothy Peterson claims that 1,500 bitcoins are lost each day.
+    </p>
+    <p>This means only a small group of people have the experience to comfortably manage their private keys, and key management stands as a barrier for average users to interact with blockchains. 
+      A popular solution is hardware wallets. It is more secure than any online software wallets but you still take responsibility to backup and store your mnemoninc phrases which is used to restore your private key in case of lost the hardware wallets. This cause another issue, whoever steal the mnemonic phrase can actually steal your cryptocurrency. Well, this is your responsibility too.
+    </p>
+    <h1>
+      Gluon is NOT a hardware wallet, it is a blockchain powered TaaS(Trust as a Service) so that you do not need to own one 
+    </h1>
     <img src="/img/home/1.png" />
+    <p>
+      Gluon is a TaaS (Trust-as-a-Service) application that provides hardware crypto wallet services to crypto users. Our main goal is to create an all-in-one private key manager for MultiSig-enabled blockchains.
+    </p>
+<h1>
+Features:
+</h1>
+<ul>
+<li>Passwordless; users won't have to take responsibility for backup mnemonic phrases.</li>
+<li>
+Social disaster recovery is available for users who have lost all their authentication devices.
+</li>
+<li>
+Private keys managed by Gluon over the TEA network are randomly distributed and encrypted by TEA Nodes, which are hardware secure modules (HSM); it is a no-fail process.
+</li>
+<li>
+Tolerance of up to 1/3 compromised or failure nodes.
+</li>
+<li>
+
+Users only need to submit a transaction to Gluon and it will take over signing and committing blockchain.
+</li>
+<li>
+Leverages popular biometric technologies in mobile devices to attain better user experiences without compromising security.
+</li>
+</ul>
+<p>
     <h1>
-      You say “I need a hardware wallet”, I heard “I need some way to protect my private key”
+How private keys are protected by Gluon
     </h1>
-    <p>
-      That’s true, you do not need whatever kind of wallet as long as you have a better way to protect your private key.
-    </p>
-    <p>
-      As I mentioned in my previous blog, (I bet you have read already) even a hardware wallet has caveats that put your digital assets at risk. What Gluon provides you is actually a Trust-as-a-Service. The trust comes from thousands of hardware wallets although you do not own them. You do not need to trust the owners of those hardware wallets, because they have no access to your secret, even you do not?
-    </p>
+<p>By default, Gluon generates 2/3 MultiSig addresses for users. The three private keys (secret) are called P1, P2, and P3. P1 is stored in the users' mobile phone, while P2 and P3 are controlled by Gluon consensuses. They are immediately split into pieces using Shamir Secure Sharing Schema right after generation. The split pieces are distributed to replicas of many TEA Nodes. TEA nodes are HSM (Hardware Secure Module). One can consider commonly used hardware wallets as special-purpose HSM, but TEA nodes are a general-purpose HSM that can do much more. The secret will never be exposed outside of hardware-protected TEA node's RAM, nor saved to any storage medias persistently. When the secret is used to sign a transaction from authorized users, it will be reconstructed and signs transactions inside a VRF selected TEA node under both hardware protection and remote attestations from a consensus called Proof of Trust (PoT). Due to the randomness, no one will ever know which TEA node stores which Shamir pieces of which secret. No one can predict which TEA node will be selected or is working on generating or rebuilding the secret. The randomness can be verified by other TEA nodes or substrate-runtime logic at both runtime and future audits.
+</p>
 
-    <h1>
-      What? I do not even have access to the private key as an owner?
-    </h1>
-    <p>
-      Sorry but you do not. If you really want, you can have a partial key as additional protection (although we do not think it is necessary). Having a full private key in your pocket is actually a bad idea. If you think you have stronger protection than those thousands of hardware wallets, then you probably do not realize what protection means. In my mind, as long as there is a decrypted secret ever expose to any computing device which potentially is able to connect to a network, the secret is no longer secure, unless the device is particularly designed and hardware protected. So I think it would be more secure to generate and store your private key in Gluon all its lifetime. It should never leave the protected environment even when it is used to sign your transaction.
-    </p>
 
-    <h1>
-      Gluon password is your only master password to the Blockchain World
-    </h1>
-    <p>
-      Since all your private keys to other blockchains are generated and stored inside Gluon, the only thing you need to remember is the Gluon password. It is actually a standard Substrate blockchain private key. You can use a browser extension or whatever software or hardware wallet.
-    </p>
+<p>
+P2 and P3 are all controlled by Layer1 (a Substrate blockchain) runtime logic. Among them, P2 is associated with the users' 2FA. We are using the Polkadot web extension at the moment. P3 is associated with a users' social recovery account but is only used to recover assets when users lose P1. (Users can only store P1 on their phones, so P1 is the only key that could be lost). This means users can assign friends as "social recovery accounts." If K of N accounts sign the "recovery transaction," P3 will be used along with P2 to transfer user assets to their new account.
+</p>
 
-    <h1>
-      Do not get panic just yet!
-    </h1>
-    <img src="/img/home/2.jpg" />
-    <p>
-      I bet you could have a feeling that being cheated because you still have to manage a key to use all your other keys. Sounds like you get a higher risk than before.
-    </p>
-    <p>
-      Do not worry, let me explain.
-    </p>
-    <p>
-      The Gluon password is not the single way of authentication. You can (and you should) config your security settings to add 2FA or 3FA to your Gluon account.
-    </p>
-    <p>
-      Because Gluon is built on top of the TEA project, a so-called “layer-2” solution framework. It can easily be integrated with other modern authentication solutions like OTP, Hardware Authenticator, Bio-ID, etc.
-    </p>
-    <p>
-      When you use Gluon to sign a transaction, based on your reconfiguration, you will be asked to punch your additional authenticator’s one-time passkey, face recognization, fingerprint, voice recognization, etc.
-    </p>
-    <p>
-      Those methods are also used for your Gluon master key recovery along with social recovery. Social recovery means you can preset a few family or friends' accounts. When you lost your Gluon key, you can physically ask them to group sign a transaction to recover your account key.
-    </p>
-    <p>
-      All these authentication or recovery are not done in a traditional centralized way. They are handled in blockchain in a decentralized manner. No one can control or force recover your account, even government enforcement.
-    </p>
+<p>
+P1 is stored in the users' Gluon mobile app. P1 will never be exposed beyond the phone even when upgrading devices. However, Gluon doesn't require users to take responsibility to backup mnemonic phrases. When upgrading to a new phone, the Gluon app can transfer P1 securely to the new device without exposing it to the network. If users lose their phones, there is no way to restore P1 because there are no backup mnemonic phrases. Losing or the leak of P1 does not lead to a loss of assets, as one can use P2+P3 for recovery and bad actors would need two keys to access assets in the case of a leak. As mentioned above, Gluon can transfer all assets to one's new account by running a social recovery process.
+</p>
+    <img src="https://camo.githubusercontent.com/3e0b9872b934e7a5045d4b0b329c32f9042e214f26ad2133ff0bc0608fabd293/68747470733a2f2f6d69726f2e6d656469756d2e636f6d2f6d61782f3737302f312a5a69796265496c73645a736d5a56367a3078315341512e706e67" />
+<h1>
+  Sidetrack: What is Gluon in physics.
+</h1>
+<p>From Wikipedia
 
-    <h1>
-      Are there actually hardware wallets running in Gluon?
-    </h1>
-    <p>
-      Internally, we do not call them hardware wallets, we call them TEA nodes. We use hardware wallets because it is a common marketing term that everyone understands. Technically TEA node becomes a hardware wallet when the Gluon actor(program) is loaded into it. It is a hardware protected security module (HSM) which the same as hardware wallets.
-    </p>
+A gluon (/ˈɡluːɒn/) is an elementary particle that acts as the exchange particle (or gauge boson) for the strong force between quarks. It is analogous to the exchange of photons in the electromagnetic force between two charged particles.[6] In layman’s terms, they “glue” quarks together, forming hadrons such as protons and neutrons. In technical terms, gluons are vector gauge bosons that mediate strong interactions of quarks in quantum chromodynamics (QCD). Gluons themselves carry the color charge of the strong interaction. This is unlike the photon, which mediates the electromagnetic interaction but lacks an electric charge. Gluons therefore participate in the strong interaction in addition to mediating it, making QCD significantly harder to analyze than quantum electrodynamics (QED).
 
-    <h1>
-      TEA nodes do not work alone, they work together
-    </h1>
-    <p>
-      The major difference is that TEA nodes cannot work alone, they can only work together with many other TEA nodes to get consensuses on almost everything. Because there are a lot of TEA nodes running 24X7 on the Peer-to-peer network, you can always get your services as you need. Any single TEA node may hold a small portion of your secret that cannot be recovered without consensus with other TEA nodes, so even they are offline, stolen, burned, or hacked, you won’t lose your secret. This is the methodology of blockchain.
-    </p>
+</p>
+<p>I am not a physician, you probably are not either. We do not have to understand all of the concepts, we only need to believe one thing the “Strong interactions” is the most strong force in the universe.
+</p>
+<p>
+From Wikipedia</p>
+<p>
 
-    <h1>
-      In what situation, Gluon can get hacked?
-    </h1>
-    <p>
-      There is no 100% security when you still need a little usability and performance. Just like any Blockchain project, Gluon and other TEA projects can be hacked too. But only under the following condition: (assuming Shamir (k,n) algorithm k = 70, n=100)
-    </p>
+In nuclear physics and particle physics, the strong interaction is the mechanism responsible for the strong nuclear force, and is one of the four known fundamental interactions, with the others being electromagnetism, the weak interaction, and gravitation. At the range of 10−15 m (1 femtometer), the strong force is approximately 137 times as strong as electromagnetism, a million times as strong as the weak interaction, and 1038 times as strong as gravitation.[1] The strong nuclear force holds most ordinary matter together because it confines quarks into hadron particles such as the proton and neutron. In addition, the strong force binds these neutrons and protons to create atomic nuclei. Most of the mass of a common proton or neutron is the result of the strong force field energy; the individual quarks provide only about 1% of the mass of a proton.
 
-    <ul>
-      <li>Among thousands of TEA nodes (there might be more, let’s assume we have thousands), there are 100 undetermined nodes each holds 1/100 of your private key.</li>
-      <li>Hacker happens to hack into 70 TEA nodes of those 100 at the same time and not detected by TEA’s hardware remote attestation consensus</li>
-    </ul>
+We want to build the wallet as strong as atomic nuclei that bound by Gluon.
+</p>
+<h1>The balance between security and ease of use</h1>
+<p>There is always a trade-off between security and ease of use.</p>
+<img src="http://teaproject.org:3001/res/blog/1_J9LMh0dB-h6P_e7-C1ntLQ.png"/>
+<p>
+  Gluon Wallet sits on the sweet spot that can bring strong security yet ease of use as if it was a centralized service.
+</p>
+<p>
+  Because it is decentralized, you do not have to trust anyone. The only two things you need to trust is math (blockchain) and physics(semiconductor technology). No one, including the builder of Gluon Wallet, the framework developer, the owners of those TEA nodes, or even the government, has the superpower to control over the peer to peer network. None of them has your secret either.
 
-    <p>
-      Because the TEA node is a black-box to everyone. No one knows which 100 block boxes among the thousands hold your secret. Hacking into any single hardware protected TEA node is not an easy job, let along there are many different technical stacks used by each TEA nodes. Hackers have to use different tools in every case. It has to be completed successfully in a rather short period of time as the key rotation over time while constant remote attestation may detect the intrusion after a few seconds. I cannot say it is impossible, but I can tell it is very hard and very expensive. As long as it is harder than hacking into your own computer or smartphone, or your hardware wallet, the Gluon is a better choice. right?
-    </p>
+</p>
+<p>
+  Because T-rust is a layer-2 solution, many traditional ease-of-use solutions from the internet era also apply here, such as 2FA, Bio-ID, social recovery, etc. However, they are handled in a decentralized manner, not as centralized as they were in the Internet era. Again, no one has control but yourself over your assets.
+</p>
+<h1>The Single-Sign-On entrance to the decentralized world
+</h1>
+<p>Many internet users like me can hardly remember all the different passwords from all websites, we use some utility like OnePassword to help us to manage passwords. As far as I know, there is no such tool in the blockchain world yet. Gluon Wallet probably is the first one to let you “single-sign-on” (SSO) to other blockchain portal using one universe master password. You can create and store all your private keys to other blockchains inside Gluon Wallet. You only need one Gluon Wallet private key as mater key, then Gluon Wallet can sign transactions for you as if it is your personal hardware wallet, just never loss, never broken.
 
-    <h1>
-      Where to get more information about Gluon?
-    </h1>
-    <p>
-      I am working on a separate Gluon Wallet project from the main TEA project website. In the meantime, you can get the basic information from TEA project website: teaproject.org, or the Framework T-rust from t-rust.com. They are actually what Gluon will be running on. Gluon is an application of the T-rust framework by the TEA project team to demonstrate what TEA can do. So if you understand TEA, you would understand Gluon.
-    </p>
-    <p>
-      The future Gluon Wallet website will be gluonwallet.com. I hope to get it to work in a few weeks. Please stay tuned.
-    </p>
+</p>
+<p>
+Since the single master key becomes important than ever, we can use additional authentications such as traditional 2FA, 3FA, Bio ID, Social Recovery, etc to protect you. You can configure based on your risk tolerance level and convenience. You are the boss, you make the call.
+</p><p>
+So Gluon Wallet could become the single entrance or portal of the upcoming blockchain era, like Google to the internet era.
+</p>
+<h1> Workflow</h1>
+<img src="https://github.com/tearust/gluon-docs/raw/master/res/typical-workflow.png?raw=true"/>
+<p>The diagram above shows a typical UI workflow, which is signing a BTC transaction.
+</p><p>
+Users start a task from the web browser. It could be the Gluon web portal or any dApps' website embedded with our js API. A hash of the transaction detail is sent to Gluon TeaLeaf. A QR code is shown on the web page for the paired Gluon mobile app to scan.
+
+</p><p>
+After scanning the QR code, the Gluon mobile app shows the transaction's detail for users to confirm visually. Users approve this transaction by fingerprinting. If there is an additional 2FA (MFA) applied, the passcode should then be entered.
+</p><p>
+
+Gluon mobile app partially signs the transaction using P1. Both the signature and transaction details are sent to Gluon TeaLeaf to continue.
+</p><p>
+
+Gluon TeaLeaf takes over the rest of the task by reconstructing P2 and signing. Finally, Gluon TeaLeaf sends the signature by P1 and P2 to Bitcoin light node to complete the transaction.
+</p><p>
+
+Both the web UI and the mobile app will receive the event of a completed task.
+</p><p>
+
+All other tasks are pretty much the same workflow.
+</p>
   </div>
 
 
