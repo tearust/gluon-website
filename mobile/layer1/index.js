@@ -8,6 +8,8 @@ const rpc = require('./rpc');
 import BN from 'bn.js';
 import forge from 'node-forge';
 
+import {cache} from 'helper';
+
 const LAYER1_URL = 'ws://81.70.96.136:9944';
 
 let _layer1 = null;
@@ -50,13 +52,25 @@ export default class Layer1 {
 
   }
 
-  mnemonicGenerate(){
-    return mnemonicGenerate();
+  async mnemonicGenerate(){
+    let mn = await cache.get('tea-mnemonic');
+    if(!mn){
+      mn = mnemonicGenerate();
+      await cache.set('tea-mnemonic', mn);
+    }
+    return mn;
   }
-  generateNewAccount(mnemonic){
+  generateWithMnemonic(mnemonic){
     const keyring = new Keyring({ type: 'sr25519' })
     const ac = keyring.addFromUri(mnemonic);
     return ac;
+  }
+
+  async getCurrentAccount(){
+    const mn = await this.mnemonicGenerate();
+    const account = this.generateWithMnemonic(mn);
+    account.mnemonic = mn;
+    return account;
   }
 
   buildCallback(key, cb){

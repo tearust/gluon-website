@@ -1,6 +1,5 @@
 
 
-const SERVER_URL = 'http://ikea-dev.eastasia.cloudapp.azure.com';
 import UI from './UI';
 
 function uuid(len, radix) {
@@ -35,27 +34,7 @@ function uuid(len, radix) {
 
 const F = {
   uuid,
-  async uploadFile(file){
-    const fo = {
-      uri: file.uri,
-      type: 'application/octet-stream',
-      name: F.uuid(),
-    };
-    
-    const fd = new FormData();
-    fd.append('file', fo);
-    const res = await fetch(SERVER_URL+'/resource', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: fd
-    });
-    const json = await res.json();
   
-    return SERVER_URL+'/resource/'+json.files[0].path;
-    
-  }
 };
 
 

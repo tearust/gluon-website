@@ -57,10 +57,10 @@ export default class extends Base {
 
   async createAccountHandler(){
     const layer1 = await Layer1.get();
-    const mn = layer1.mnemonicGenerate();
-    const ac = layer1.generateNewAccount(mn);
+    const ac = await layer1.getCurrentAccount();
 
     UI.log(ac)
+    return ac;
   }
 
   async scanQrCodeHandler(){

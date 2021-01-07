@@ -21,11 +21,11 @@ const F = {
 
     const data_str = JSON.stringify(data);
 
-    return AsyncStorage.setItem(key, data_str);
+    return await AsyncStorage.setItem(key, data_str);
   },
 
-  remove(key){
-    return AsyncStorage.removeItem(key);
+  async remove(key){
+    return await AsyncStorage.removeItem(key);
   },
 
   clearAll(){

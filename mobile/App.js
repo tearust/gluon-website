@@ -58,6 +58,7 @@ const RootApp = (props)=>{
   
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
+
     async function loadResourcesAndDataAsync() {
       try {
         

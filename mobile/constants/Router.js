@@ -4,7 +4,8 @@ import {TabBarIcon, TabBarText} from '../components/TabBar';
 
 import BtcHome from '../screens/btc/Home';
 
-import ProfileHome from '../screens/profile/index';
+import ProfileHome from '../screens/profile/Profile';
+import Layer1AccountProfile from '../screens/profile/Layer1AccountProfile';
 import Test from '../screens/profile/test';
 
 export default {
@@ -49,7 +50,10 @@ export default {
   ],
 
   stack : [
-    
+    {
+      name: 'layer1_account_profile',
+      component: Layer1AccountProfile,
+    },
     
   ]
 }
