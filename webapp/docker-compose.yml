@@ -1,0 +1,14 @@
+version: "3.1"
+services:
+
+  gluon-layer1:
+    image: tearust/tea-layer1:gluon
+    container_name: gluon-layer1
+    ports:
+      - 9944:9944
+      - 30333:30333
+    volumes:
+      - .layer1:/root/.local
+    command: bash -c "tea-layer1 --dev --alice --tmp --ws-port 9944 --rpc-port 9933 --unsafe-ws-external --unsafe-rpc-external --rpc-cors all"
+        
+    
