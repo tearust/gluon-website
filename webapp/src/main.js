@@ -33,6 +33,9 @@ new Vue({
   router,
   store,
   methods: {
+    isDev(){
+      return process.env.NODE_ENV === 'development';
+    },
     loading(f, text='Loading...'){
       if(f){
         C._loading = Loading.service({

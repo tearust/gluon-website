@@ -8,6 +8,7 @@ const rpc = require('./rpc');
 import toHex from 'to-hex';
 import BN from 'bn.js';
 import utils from './utils';
+import gluon from './gluon';
 const LAYER1_URL = utils.get_env('layer1_url') || 'ws://127.0.0.1:9944';
 
 class Layer1 {
@@ -15,6 +16,8 @@ class Layer1 {
     this.api = null;
     this.callback = {};
     this.extension = extension;
+
+    this.gluon = null;
   }
   getDefaultAccount(){
     const keyring = new Keyring({ type: 'sr25519' });
@@ -37,6 +40,8 @@ class Layer1 {
     this.api.query.system.events((events) => {
       this.handle_events(events)
     });
+
+    this.gluon = new gluon(this.api, this.extension);
   }
 
   buildCallback(key, cb){
@@ -184,31 +189,6 @@ class Layer1 {
     });
 
     console.log('send add_new_task tx')
-  }
-
-  async deposit(account, {
-    delegator_tea_id,
-    delegator_ephemeral_id,
-    delegator_signature,
-    amount,
-    expire_time,
-  }, callback){
-    await this.extension.setSignerForAddress(account, this.api);
-    console.log(this.api.tx.tea);
-    this.api.tx.tea.deposit(delegator_tea_id, delegator_ephemeral_id, delegator_signature, amount, expire_time)
-      .signAndSend(account, ({ events = [], status }) => {
-        if (status.isInBlock) {
-              console.log('Included at block hash', status.asInBlock.toHex());
-              console.log('Events:');
-              events.forEach(({ event: { data, method, section }, phase }) => {
-                    console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
-              });
-
-              callback(true, status.asInBlock.toHex());
-        } else if (status.isFinalized) {
-              console.log('Finalized block hash', status.asFinalized.toHex());
-        }
-      });
   }
 
   async nodeByEphemeralId(eid_0x, cb){

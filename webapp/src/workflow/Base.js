@@ -16,6 +16,8 @@ export default class {
   constructor() {
     this.layer1 = _layer1;
     this._log = Log.create(this.defineLog());
+
+    this.gluon = null;
   }
 
   defineLog(){
@@ -24,6 +26,7 @@ export default class {
 
   async init() {
     await this.initLayer1();
+    this.gluon = this.layer1.gluon;
   }
 
   async initLayer1() {
