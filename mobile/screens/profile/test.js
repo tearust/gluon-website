@@ -86,18 +86,17 @@ export default class extends Base {
   async pairWithNonce(){
     const layer1 = await Layer1.get();
 
-    const nonce = layer1.gluon.getRandomNonce();
+    const nonce = '10000'; //layer1.gluon.getRandomNonce();
     console.log(nonce);
     
     try{
       const ac = await layer1.getCurrentAccount();
       console.log(ac);
-      await layer1.gluon.responePairWithNonce(nonce, ac, (f)=>{
-        UI.log(f);
-      })
+      await layer1.gluon.responePairWithNonce(nonce, ac, '5FnjDG3j9uVCXuyCd2UgzwHUyT7CpgbR6HquvPdas4ttvErM');
+      UI.alert('success')
     }catch(e){
       const err = e.toString();
-      console.log(11, err);
+      UI.error(err);
     }
   }
 

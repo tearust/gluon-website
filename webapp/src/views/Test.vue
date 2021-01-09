@@ -58,20 +58,12 @@ export default {
     async pairWithMobile(){
       const address = this.layer1_account.address;
 
-      const ac = this.test.layer1.getDefaultAccount('Alice');
+      // const ac = this.test.layer1.getDefaultAccount('Alice');
       try{
         const nonce = this.test.gluon.getRandomNonce();
-        await this.test.gluon.sendNonceForPairMobileDevice(nonce, ac, (f, err)=>{
-          if(!f){
-            this.$alert(err, 'Layer1 Error', {
-              type: 'error'
-            });
-            return;
-          }
-          
-          this.nonce = nonce;
-          this.$message.success('success');
-        });
+        await this.test.gluon.sendNonceForPairMobileDevice(nonce, address);
+        this.nonce = nonce;
+        this.$message.success('success');
       }catch(e){
         const err = e.message || e.toString();
         this.$alert(err, 'Layer1 Error', {
@@ -86,19 +78,11 @@ export default {
       //   return alert('pair first');
       // }
       const ac = this.test.layer1.getDefaultAccount('Bob');
-const ac_a = this.test.layer1.getDefaultAccount('Alice');
-console.log(ac_a);
+
       try{
         const nonce = this.test.gluon.getRandomNonce(); //this.nonce;
-        await this.test.gluon.responePairWithNonce(nonce, ac, ac_a.publicKey, (f, err)=>{
-          if(!f){
-            this.$alert(err, 'Layer1 Error', {
-              type: 'error'
-            });
-            return;
-          }
+        await this.test.gluon.responePairWithNonce(nonce, ac, this.layer1_account.address);
 
-        })
       }catch(e){
         const err = e.message || e.toString();
         this.$alert(err, 'Layer1 Error', {

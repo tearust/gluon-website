@@ -1,5 +1,6 @@
 import _ from 'lodash';
-const { stringToU8a, u8aToHex } = require('@polkadot/util');
+import { stringToHex, u8aToHex, promisify, } from '@polkadot/util';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import forge from 'node-forge';
 
 let ERRORS = `InvalidSig,
@@ -66,57 +67,53 @@ export default class {
   sha256(data){
     const tmp = forge.sha256.create();
     tmp.update(data);
-    return tmp.digest().bytes();
+    return tmp.digest().toHex();
+  }
+
+  async promisify(fn){
+    await promisify(this, async (cb)=>{
+      try{
+        await fn(cb);
+      }catch(e){
+        cb(e.toString());
+      }
+    })
   }
 
   // broswer side
-  async sendNonceForPairMobileDevice(nonce, account_address, cb){
+  async sendNonceForPairMobileDevice(nonce, account_address){
     if(!nonce){
       throw 'Invalid nonce';
     }
+    
+    await this.buildAccount(account_address);
+    let nonce_hex = '0x'+this.sha256(nonce);
 
-    const a = this.sha256(nonce);
-    const b = stringToU8a(a);
-    const c = u8aToHex(b);
-    
-    // await this.buildAccount(account_address);
-    // const xx = stringToU8a(nonce);
-    // let nonce_hex = u8aToHex(xx);
-    console.log(111, a,b, c)
-    this.api.tx.gluon.browserSendNonce(
-      c,
-    ).signAndSend(account_address, (param)=>{
-      this._transactionCallback(param, (error)=>{
-        if(error){
-          cb(false, error);
-        }
-        else{
-          cb(true);
-        }
+    await this.promisify(async (cb)=>{
+      await this.api.tx.gluon.browserSendNonce(
+        nonce_hex,
+      ).signAndSend(account_address, (param)=>{
+        this._transactionCallback(param, cb);
       });
-    });
-    
+        
+    }); 
   }
 
-  async responePairWithNonce(nonce, account, pub, cb){
+  async responePairWithNonce(nonce, account, pair_address){
     if(!nonce){
       throw 'Invalid nonce';
     }
 
-    // const pub = account.publicKey;
-    let nonce_hex = (nonce);
-    console.log(22, nonce_hex, u8aToHex(pub))
-    await this.api.tx.gluon.sendRegistrationApplication(nonce_hex, u8aToHex(pub))
-      .signAndSend(account, (param)=>{
-        this._transactionCallback(param, (error)=>{
-          if(error){
-            cb(false, error);
-          }
-          else{
-            cb(true);
-          }
-        });
-      })
+    const pub = decodeAddress(pair_address);
+    console.log('responePairWithNonce', nonce, u8aToHex(pub))
+    await this.promisify(async (cb)=>{
+      await this.api.tx.gluon.sendRegistrationApplication(
+        nonce,
+        u8aToHex(pub)
+      ).signAndSend(account, (param)=>{
+        this._transactionCallback(param, cb);
+      });
+    })
   }
 
 
@@ -139,7 +136,7 @@ export default class {
         console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
       })
 
-      cb();
+      cb(null, true);
     } else if (status.isFinalized) {
       console.log('Finalized block hash', status.asFinalized.toHex())
     }

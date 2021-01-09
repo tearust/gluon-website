@@ -1,5 +1,41 @@
 import _ from 'lodash';
-const { stringToU8a, u8aToHex } = require('@polkadot/util');
+import { stringToHex, u8aToHex, promisify, } from '@polkadot/util';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
+import forge from 'node-forge';
+
+let ERRORS = `InvalidSig,
+InvalidNonceSig,
+InvalidSignatureLength,
+DelegatorNotExist,
+  AccountIdConvertionError,
+  InvalidToAccount,
+  SenderIsNotBuildInAccount,
+  SenderAlreadySigned,
+  TransferAssetTaskTimeout,
+  BrowserNonceAlreadyExist,
+  AppBrowserPairAlreadyExist,
+  NonceNotMatch,
+  NonceNotExist,
+  TaskNotMatch,
+  TaskNotExist,
+  KeyGenerationSenderAlreadyExist,
+  KeyGenerationSenderNotExist,
+  KeyGenerationTaskAlreadyExist,
+  KeyGenerationResultExist,
+  SignTransactionTaskAlreadyExist,
+  SignTransactionResultExist,
+  AccountGenerationTaskAlreadyExist,
+  AssetAlreadyExist,
+  AssetNotExist,
+  InvalidAssetOwner,
+  AppBrowserNotPair,
+  AppBrowserPairNotExist,
+  TaskTimeout,`;
+
+ERRORS = _.map(ERRORS.split(','), (v)=>{
+  return _.trim(v);
+})
+
 
 export default class {
   constructor(api, extension, env=null){
@@ -11,9 +47,8 @@ export default class {
   }
 
   getRandomNonce(){
-    let nonce = _.random(1, 100000000000).toString();
-    nonce = u8aToHex(nonce);
-console.log(111, nonce);
+    let nonce = '10000'; //_.random(1, 100000000000).toString();
+
     return nonce;
   }
 
@@ -29,50 +64,97 @@ console.log(111, nonce);
     throw 'invalid account In '+this.env;
   }
 
-  // broswer side
-  async sendNonceForPairMobileDevice(account_address, callback=null){
-    const nonce = this.getRandomNonce();
-    
-    await this.buildAccount(account_address);
-    console.log('layer1 account => ', account_address);
-    await this.api.tx.gluon.browserSendNonce(u8aToHex(nonce)).
-      signAndSend(account_address, ({ events = [], status }) => {
-        if (status.isInBlock) {
-          console.log('Included at block hash', status.asInBlock.toHex());
-          console.log('Events:');
-          events.forEach(({ event: { data, method, section }, phase }) => {
-            console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
-          })
-
-          callback(true, nonce);
-        } else if (status.isFinalized) {
-          console.log('Finalized block hash', status.asFinalized.toHex())
-        }
-      });
-
+  sha256(data){
+    const tmp = forge.sha256.create();
+    tmp.update(data);
+    return tmp.digest().toHex();
   }
 
-  async responePairWithNonce(nonce, account, callback){
+  async promisify(fn){
+    await promisify(this, async (cb)=>{
+      try{
+        await fn(cb);
+      }catch(e){
+        cb(e.toString());
+      }
+    })
+  }
+
+  // broswer side
+  async sendNonceForPairMobileDevice(nonce, account_address){
+    if(!nonce){
+      throw 'Invalid nonce';
+    }
+    
+    await this.buildAccount(account_address);
+    let nonce_hex = '0x'+this.sha256(nonce);
+
+    await this.promisify(async (cb)=>{
+      await this.api.tx.gluon.browserSendNonce(
+        nonce_hex,
+      ).signAndSend(account_address, (param)=>{
+        this._transactionCallback(param, cb);
+      });
+        
+    }); 
+  }
+
+  async responePairWithNonce(nonce, account, pair_address){
     if(!nonce){
       throw 'Invalid nonce';
     }
 
-    await this.buildAccount(account);
-    const pub = account.publicKey;
-    console.log(22, pub, u8aToHex(pub))
-    await this.api.tx.gluon.sendRegistrationApplication(nonce, u8aToHex(pub))
-      .signAndSend(account, ({ events = [], status }) => {
-        if (status.isInBlock) {
-          console.log('Included at block hash', status.asInBlock.toHex())
-          console.log('Events:')
-          events.forEach(({ event: { data, method, section }, phase }) => {
-            console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
-          })
+    const pub = decodeAddress(pair_address);
+    console.log('responePairWithNonce', nonce, u8aToHex(pub))
+    await this.promisify(async (cb)=>{
+      await this.api.tx.gluon.sendRegistrationApplication(
+        nonce,
+        u8aToHex(pub)
+      ).signAndSend(account, (param)=>{
+        this._transactionCallback(param, cb);
+      });
+    })
+  }
 
-          callback(true);
-        } else if (status.isFinalized) {
-          console.log('Finalized block hash', status.asFinalized.toHex())
+
+  _transactionCallback(param, cb){
+    const { events = [], status } = param;
+    if (status.isInBlock) {
+      console.log('Included at block hash', status.asInBlock.toHex());
+      console.log('Events:');
+
+      events.forEach(({ event: { data, method, section }, phase }) => {
+        
+        if(method === 'ExtrinsicFailed'){
+          const error = this._findError(data);
+          if(error){
+            cb(error);
+            return;
+          }
+          console.log(11, data.toString())
         }
+        console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
       })
+
+      cb(null, true);
+    } else if (status.isFinalized) {
+      console.log('Finalized block hash', status.asFinalized.toHex())
+    }
+  }
+  _findError(data){
+    let err = false;
+
+    _.each(data.toJSON(), (p)=>{
+      if(!_.isUndefined(_.get(p, 'Module.error'))){
+        err = _.get(p, 'Module.error');
+        return false;
+      }
+    });
+
+    if(err !== false){
+      return ERRORS[err];
+    }
+
+    return null;
   }
 }
