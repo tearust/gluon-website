@@ -9,8 +9,9 @@ import BN from 'bn.js';
 import forge from 'node-forge';
 
 import {cache} from 'helper';
+import gluon from './gluon';
 
-const LAYER1_URL = 'ws://81.70.96.136:9944';
+const LAYER1_URL = 'ws://127.0.0.1:9944';
 
 let _layer1 = null;
 export default class Layer1 {
@@ -28,6 +29,8 @@ export default class Layer1 {
   constructor(){
     this.api = null;
     this.callback = {};
+
+    this.gluon = null;
   }
   getDefaultAccount(){
     const keyring = new Keyring({ type: 'sr25519' });
@@ -50,6 +53,7 @@ export default class Layer1 {
       this.handle_events(events)
     });
 
+    this.gluon = new gluon(this.api, null, 'app');
   }
 
   async mnemonicGenerate(){
@@ -70,6 +74,7 @@ export default class Layer1 {
     const mn = await this.mnemonicGenerate();
     const account = this.generateWithMnemonic(mn);
     account.mnemonic = mn;
+    account.balance = await this.getAccountBalance(account.address);
     return account;
   }
 

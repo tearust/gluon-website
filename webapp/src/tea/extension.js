@@ -11,6 +11,7 @@ class Extension {
 
   async getAllAccounts(){
     const allAccounts = await web3Accounts();
+    console.log(333, allAccounts)
     return _.map(allAccounts, (item) => {
       return {
         address: item.address,

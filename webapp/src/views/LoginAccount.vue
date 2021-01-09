@@ -27,7 +27,7 @@
 
   <el-divider />
 
-  <div class="tea-card mb">
+  <div class="tea-card mb" v-if="this.bind_mobile.address">
     <i class="x-icon el-icon-mobile-phone"></i>
 
     <div class="x-list">
@@ -47,8 +47,8 @@
     </div>
   </div>
 
-  <div class="tea-card flex-center gray">
-    <el-button class="x-only-btn">BIND MOBILE</el-button>
+  <div class="tea-card flex-center gray" v-if="!this.bind_mobile.address">
+    <el-button @click="bindMobileHandler()" :disabled="!this.layer1_account.address" class="x-only-btn">BIND MOBILE</el-button>
   </div>
   
 </div>
@@ -76,8 +76,8 @@ export default {
   async mounted(){
     this.$root.loading(true);
 
-    this.sa = new SettingAccount();
-    await this.sa.init();
+    this.wf = new SettingAccount();
+    await this.wf.init();
 
     this.$root.loading(false);
 
@@ -85,7 +85,43 @@ export default {
 
   methods: {
     showSelectLayer1(){
-      this.sa.showSelectLayer1Modal();
+      this.wf.showSelectLayer1Modal();
+    },
+
+    async bindMobileHandler(){
+      const address = this.layer1_account.address;
+      const gluon = this.wf.gluon;
+      try{
+        const nonce = gluon.getRandomNonce();
+        this.$root.loading(true);
+        await gluon.sendNonceForPairMobileDevice(nonce, address, (f, err)=>{
+          if(!f){
+            this.$alert(err, 'Layer1 Error', {
+              type: 'error'
+            });
+
+            this.$root.loading(false);
+            return;
+          }
+          
+          const json = {
+            nonce: nonce,
+            type: 'pair',
+          };
+
+          this.$root.loading(false);
+          this.wf.showQrCodeModal({
+            text: JSON.stringify(json),
+          });
+
+        });
+      }catch(e){
+        const err = e.message || e.toString();
+        this.$alert(err, 'Layer1 Error', {
+          type: 'error'
+        });
+        this.$root.loading(false);
+      }
     }
   }
 }

@@ -53,7 +53,6 @@ export default class {
   showSelectLayer1Modal(){
     utils.publish('tea-select-layer1-modal', true);
   }
-
   
 
   

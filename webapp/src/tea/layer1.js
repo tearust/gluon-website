@@ -19,9 +19,9 @@ class Layer1 {
 
     this.gluon = null;
   }
-  getDefaultAccount(){
+  getDefaultAccount(name='Alice'){
     const keyring = new Keyring({ type: 'sr25519' });
-    const ac = keyring.addFromUri(`//Alice`, { name: `Alice default` });
+    const ac = keyring.addFromUri(`//${name}`, { name: `${name} default` });
     return ac;
   }
   async init(){
@@ -41,7 +41,7 @@ class Layer1 {
       this.handle_events(events)
     });
 
-    this.gluon = new gluon(this.api, this.extension);
+    this.gluon = new gluon(this.api, this.extension, 'browser');
   }
 
   buildCallback(key, cb){

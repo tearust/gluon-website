@@ -4,8 +4,11 @@ const types = {
   TeaPubKey: '[u8; 32]',
   Url: 'Bytes',
   Cid: 'Bytes',
+  TxData: "Bytes",
   RefNum: 'H256',
   Result: 'Bytes',
+  ClientPubKey: "Bytes",
+  Signature: "Bytes",
   NodeStatus: {
     _enum: ['Pending', 'Active', 'Inactive', 'Invalid']
   },
@@ -78,6 +81,49 @@ const types = {
     cid: 'Cid',
     ephemeralId: 'TeaPubKey',
     updateHeight: 'BlockNumber'
+  },
+  AccountAsset: {
+    accountId: "Cid",
+    btc: "Vec<Cid>",
+    eth: "Vec<Cid>"
+ },
+  Asset: {
+    owner: "AccountId",
+    p2: "Cid",
+    deploymentIds: "Vec<Cid>"
+  },
+  AccountGenerationDataWithoutP3: {
+    keyType: "Cid",
+    n: "u32",
+    k: "u32",
+    delegatorNonceHash: "Cid",
+    delegatorNonceRsa: "Cid",
+    p1: "Cid"
+  },
+  KeyGenerationResult: {
+    taskId: "Cid",
+    p2: "Cid",
+    p2DeploymentIds: "Vec<Cid>",
+    multiSigAccount: "Cid"
+  },
+  SignTransactionData: {
+    dataAdhoc: "TxData",
+    delegatorNonceHash: "Cid",
+    delegatorNonceRsa: "Cid"
+  },
+  SignTransactionResult: {
+    taskId: "Cid",
+    succeed: 'bool'
+  },
+  ransferAssetTask: {
+    from: "Cid",
+    to: "Cid",
+    startHeight: "BlockNumber"
+  },
+  TransferAssetTask: {
+    from: "Cid",
+    to: "Cid",
+    "startHeight": "BlockNumber"
   }
 }
 

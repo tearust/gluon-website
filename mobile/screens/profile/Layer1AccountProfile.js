@@ -46,24 +46,16 @@ export default class extends Base {
             <Card.Divider/>
             <Text style={sy.text}>ADDRESS: {this.state.layer1_account.address}</Text>
             <Divider />
+            <Text style={sy.text}>BALANCE: {this.state.layer1_account.balance}</Text>
+            <Divider />
             <Text style={sy.text}>{this.state.layer1_account.mnemonic}</Text>
           </Card>
         )}
-        
-        <Button onPress={this.signHandler.bind(this)} type="solid" title="SIGN" containerStyle={{marginTop: 30}} />
+      
         
 
       </ScrollPageView>
     );
-  }
-  signHandler(){
-    if(this.state.layer1_account){
-      // const rs = this.state.layer1_account.sign("aaa");
-      // console.log(11, rs);
-
-      // const x = this.state.layer1_account.verify('aaa', rs);
-      // UI.log(x);
-    }
   }
 
   renderHeader(){
@@ -79,11 +71,11 @@ export default class extends Base {
 
     const layer1 = await Layer1.get();
     const ac = await layer1.getCurrentAccount();
+
     this.setState({
       layer1_account: ac
     });
 
-    console.log(ac)
     UI.loading(false);
   }
 

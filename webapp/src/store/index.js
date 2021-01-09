@@ -12,8 +12,8 @@ const store = new Vuex.Store({
     },
 
     bind_mobile: {
-      address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-      uuid: '29308409284023805283502845038453095803485308503',
+      // address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+      // uuid: '29308409284023805283502845038453095803485308503',
     },
 
     btc_list: [

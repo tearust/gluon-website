@@ -6,6 +6,7 @@ import {View} from 'react-native';
 import Text from '../../components/Text';
 import Header from '../../components/Header';
 import {Progress, Card} from '@ant-design/react-native';
+import Layer1 from '../../layer1';
 
 
 import Styles from '../../constants/Styles';
@@ -35,6 +36,15 @@ export default class extends Base {
             <Button containerStyle={{marginTop: 30,}} title={'Verify'} onPress={this.btc_verify.bind(this)} />
           </Card.Body>
         </Card>
+
+        <Card>
+          <Card.Header title="LAYER1" />
+          <Card.Body>
+            <Button title={'PAIR WITH NONCE'} onPress={this.pairWithNonce.bind(this)} />
+            
+          </Card.Body>
+        </Card>
+
     <Text>{this.state.text}</Text>
         
       </ScrollPageView>
@@ -73,9 +83,31 @@ export default class extends Base {
     )
   }
 
+  async pairWithNonce(){
+    const layer1 = await Layer1.get();
+
+    const nonce = layer1.gluon.getRandomNonce();
+    console.log(nonce);
+    
+    try{
+      const ac = await layer1.getCurrentAccount();
+      console.log(ac);
+      await layer1.gluon.responePairWithNonce(nonce, ac, (f)=>{
+        UI.log(f);
+      })
+    }catch(e){
+      const err = e.toString();
+      console.log(11, err);
+    }
+  }
+
   async componentDidMount(){
+    UI.loading(true);
     this.btc = new Btc('a');
     await this.btc.init();
+
+    await Layer1.get();
+    UI.loading(false);
   }
   
 }

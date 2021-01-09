@@ -11,6 +11,9 @@
   <el-button type="primary" @click="pairWithMobile()">PAIR WITH MOBILE</el-button>
   <el-divider />
 
+  <el-button type="primary" @click="mobileResponsePair()">MOBILE RESPONSE PAIR</el-button>
+  <el-divider />
+
 </div>
 </template>
 <script>
@@ -19,7 +22,9 @@ import _ from 'lodash';
 import { mapGetters, mapState } from 'vuex'
 export default {
   data(){
-    return {};
+    return {
+      nonce: null,
+    };
   },
 
   computed: {
@@ -53,9 +58,54 @@ export default {
     async pairWithMobile(){
       const address = this.layer1_account.address;
 
-      await this.test.gluon.sendNonceForPairMobileDevice(address, (flag, rs)=>{
-        console.log(1, flag, rs);
-      })
+      const ac = this.test.layer1.getDefaultAccount('Alice');
+      try{
+        const nonce = this.test.gluon.getRandomNonce();
+        await this.test.gluon.sendNonceForPairMobileDevice(nonce, ac, (f, err)=>{
+          if(!f){
+            this.$alert(err, 'Layer1 Error', {
+              type: 'error'
+            });
+            return;
+          }
+          
+          this.nonce = nonce;
+          this.$message.success('success');
+        });
+      }catch(e){
+        const err = e.message || e.toString();
+        this.$alert(err, 'Layer1 Error', {
+          type: 'error'
+        });
+      }
+      
+    },
+
+    async mobileResponsePair(){
+      // if(!this.nonce){
+      //   return alert('pair first');
+      // }
+      const ac = this.test.layer1.getDefaultAccount('Bob');
+const ac_a = this.test.layer1.getDefaultAccount('Alice');
+console.log(ac_a);
+      try{
+        const nonce = this.test.gluon.getRandomNonce(); //this.nonce;
+        await this.test.gluon.responePairWithNonce(nonce, ac, ac_a.publicKey, (f, err)=>{
+          if(!f){
+            this.$alert(err, 'Layer1 Error', {
+              type: 'error'
+            });
+            return;
+          }
+
+        })
+      }catch(e){
+        const err = e.message || e.toString();
+        this.$alert(err, 'Layer1 Error', {
+          type: 'error'
+        });
+      }
+      
     }
   },
 
