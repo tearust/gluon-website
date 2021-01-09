@@ -2,12 +2,14 @@ import React from 'react';
 import {Button, Input, Image, Icon, ListItem} from 'react-native-elements';
 import {Base, _, UI, Btc,} from 'helper';
 import {ScrollPageView} from '../../components/Page';
-import {View} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import Text from '../../components/Text';
 import Header from '../../components/Header';
 import {Progress, Card} from '@ant-design/react-native';
 import Layer1 from '../../layer1';
 
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 
 import Styles from '../../constants/Styles';
 import Layout from '../../constants/Layout';
@@ -46,9 +48,30 @@ export default class extends Base {
         </Card>
 
     <Text>{this.state.text}</Text>
+
+    <QRCodeScanner
+        onRead={this.onSuccess.bind(this)}
+        flashMode={RNCamera.Constants.FlashMode.torch}
+        topContent={
+          <Text style={styles.centerText}>
+            Go to{' '}
+            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
+            your computer and scan the QR code.
+          </Text>
+        }
+        bottomContent={
+          <TouchableOpacity style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>OK. Got it!</Text>
+          </TouchableOpacity>
+        }
+      />
         
       </ScrollPageView>
     );
+  }
+
+  onSuccess(e){
+    console.log(1, e);
   }
 
   btc_sign(){

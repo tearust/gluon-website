@@ -55,7 +55,11 @@ export default {
         this.changeLang();
         return false;
       }
-      this.$router.push(key);
+      
+      if(this.$route.path !== key){
+        this.$router.push(key);
+      }
+      
     },
     changeLang(){
       if(this.$i18n.locale === 'en'){

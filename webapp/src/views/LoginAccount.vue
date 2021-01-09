@@ -94,32 +94,24 @@ export default {
       try{
         const nonce = gluon.getRandomNonce();
         this.$root.loading(true);
-        await gluon.sendNonceForPairMobileDevice(nonce, address, (f, err)=>{
-          if(!f){
-            this.$alert(err, 'Layer1 Error', {
-              type: 'error'
-            });
+        await gluon.sendNonceForPairMobileDevice(nonce, address);
 
-            this.$root.loading(false);
-            return;
-          }
-          
-          const json = {
-            nonce: nonce,
-            type: 'pair',
-          };
+        const json = {
+          nonce,
+          address,
+          type: 'pair',
+        };
 
-          this.$root.loading(false);
-          this.wf.showQrCodeModal({
-            text: JSON.stringify(json),
-          });
-
+        this.wf.showQrCodeModal({
+          text: JSON.stringify(json),
         });
       }catch(e){
         const err = e.message || e.toString();
         this.$alert(err, 'Layer1 Error', {
           type: 'error'
         });
+        
+      }finally{
         this.$root.loading(false);
       }
     }

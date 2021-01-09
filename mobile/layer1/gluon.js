@@ -3,34 +3,37 @@ import { stringToHex, u8aToHex, promisify, } from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import forge from 'node-forge';
 
-let ERRORS = `InvalidSig,
-InvalidNonceSig,
-InvalidSignatureLength,
-DelegatorNotExist,
-  AccountIdConvertionError,
-  InvalidToAccount,
-  SenderIsNotBuildInAccount,
-  SenderAlreadySigned,
-  TransferAssetTaskTimeout,
-  BrowserNonceAlreadyExist,
-  AppBrowserPairAlreadyExist,
-  NonceNotMatch,
-  NonceNotExist,
-  TaskNotMatch,
-  TaskNotExist,
-  KeyGenerationSenderAlreadyExist,
-  KeyGenerationSenderNotExist,
-  KeyGenerationTaskAlreadyExist,
-  KeyGenerationResultExist,
-  SignTransactionTaskAlreadyExist,
-  SignTransactionResultExist,
-  AccountGenerationTaskAlreadyExist,
-  AssetAlreadyExist,
-  AssetNotExist,
-  InvalidAssetOwner,
-  AppBrowserNotPair,
-  AppBrowserPairNotExist,
-  TaskTimeout,`;
+let ERRORS = `
+InvalidSig,
+	    InvalidNonceSig,
+	    InvalidSignatureLength,
+	    DelegatorNotExist,
+        AccountIdConvertionError,
+        InvalidToAccount,
+        SenderIsNotBuildInAccount,
+        SenderAlreadySigned,
+        TransferAssetTaskTimeout,
+        BrowserTaskALreadyExist,
+        BrowserNonceAlreadyExist,
+        AppBrowserPairAlreadyExist,
+        NonceNotMatch,
+        NonceNotExist,
+        TaskNotMatch,
+        TaskNotExist,
+        KeyGenerationSenderAlreadyExist,
+        KeyGenerationSenderNotExist,
+        KeyGenerationTaskAlreadyExist,
+        KeyGenerationResultExist,
+        SignTransactionTaskAlreadyExist,
+        SignTransactionResultExist,
+        AccountGenerationTaskAlreadyExist,
+        AssetAlreadyExist,
+        AssetNotExist,
+        InvalidAssetOwner,
+        AppBrowserNotPair,
+        AppBrowserPairNotExist,
+        TaskTimeout,
+`;
 
 ERRORS = _.map(ERRORS.split(','), (v)=>{
   return _.trim(v);
@@ -124,7 +127,7 @@ export default class {
       console.log('Events:');
 
       events.forEach(({ event: { data, method, section }, phase }) => {
-        
+        console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
         if(method === 'ExtrinsicFailed'){
           const error = this._findError(data);
           if(error){
@@ -133,7 +136,7 @@ export default class {
           }
           console.log(11, data.toString())
         }
-        console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
+        
       })
 
       cb(null, true);
@@ -156,5 +159,33 @@ export default class {
     }
 
     return null;
+  }
+
+  // async nodeByEphemeralId(eid, cb){
+  //   const teaId = await api.query.tea.ephemeralIds('0x'+eid);
+  //   if (teaId.isNone) {
+  //     cb(false);
+  //     return false;
+  //   }
+
+  //   const nodeObj = await api.query.tea.nodes(teaId.unwrap());
+  //   const node = nodeObj.toJSON();
+  //   console.log(111, node);
+
+  //   node.http = node.urls[0] ? utils.forge.util.hexToBytes(node.urls[0]) : '';
+
+  //   cb(true, node);
+  // }
+
+  async getTeaNodes(){
+    const nodes = await this.api.query.tea.nodes.entries();
+  
+    const teaNodes = _.slice(nodes, 0, 100).map((n) => {
+      return n[1]
+    })
+
+    console.log("teaNodes", JSON.stringify(teaNodes));
+
+    return teaNodes;
   }
 }
