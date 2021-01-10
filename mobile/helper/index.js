@@ -9,6 +9,8 @@ import request from './request';
 import Btc from './Btc';
 import crypto from './crypto';
 
+import {connect} from 'react-redux';
+
 
 const init = (param)=>{
 	param = _.extend({
@@ -20,7 +22,12 @@ const init = (param)=>{
 	EStyle.build(_.merge({}, param.themeStyle));
 };
 
+const createContainer = (ELEM, mapState, mapDispatch)=>{
+	return connect(mapState, mapDispatch)(ELEM);
+};
+
 export {
+	createContainer,
 	Base,
 	_,
 	UI,

@@ -50,7 +50,7 @@ export default class {
   }
 
   getRandomNonce(){
-    let nonce = '10000'; //_.random(1, 100000000000).toString();
+    let nonce = _.random(1, 100000000000).toString();
 
     return nonce;
   }
@@ -102,6 +102,7 @@ export default class {
     }); 
   }
 
+  // app side
   async responePairWithNonce(nonce, account, pair_address){
     if(!nonce){
       throw 'Invalid nonce';
@@ -188,4 +189,6 @@ export default class {
 
     return teaNodes;
   }
+
+  
 }

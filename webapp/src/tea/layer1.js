@@ -59,63 +59,32 @@ class Layer1 {
   async getAccountBalance(account){
     let { data: { free: previousFree }, nonce: previousNonce } = await this.api.query.system.account(account);
 
-    // console.log(222, previousFree, previousNonce);
-    // console.log(`Layer1 has a balance of ${previousFree}, nonce ${previousNonce}`);
-    // this.api.query.system.account(account, ({ data: { free: currentFree }, nonce: currentNonce }) => {
-    //   // Calculate the delta
-    //   const change = currentFree.sub(previousFree);
-  
-    //   // Only display positive value changes (Since we are pulling `previous` above already,
-    //   // the initial balance change will also be zero)
-    //   if (!change.isZero()) {
-    //     console.log(`New balance change of ${change}, nonce ${currentNonce}`);
-  
-    //     previousFree = currentFree;
-    //     previousNonce = currentNonce;
-
-    //     console.log(333, previousFree, previousNonce);
-    //   }
-    // });
     const free = parseInt(previousFree.toString(), 10) / this.asUnit();
     return Math.floor(free*10000)/10000;
   }
 
-  // async test(){
-  //   const api = this.api;
-  //   const keyring = new Keyring({ type: 'sr25519' });
-  //   const Alice = keyring.addFromUri('//Bob', { name: 'Bob default' });
-  //   console.log('==== >', Alice);
+  async faucet(target_address){
+    const da = this.getDefaultAccount();
+    const total = new BN((1000*this.asUnit()).toString(), 10);
+    const transfer = this.api.tx.balances.transfer(target_address, total);
 
-  //   // const chain = await this.api.rpc.system.chain();
-  //   // const lastHeader = await this.api.rpc.chain.getHeader();
-  //   // console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
-
-  //   const all_account = await this.extension.getAllAccounts();
-  //   const me = all_account[0].address;
-  //   console.log(222, me);
-
-  //   const transfer = this.api.tx.balances.transfer(Alice.address, 2.0);
-  //   console.log(11, this.api.tx.balances.transfer);
-  //   // const hash = await transfer.signAndSend(Alice);
-
-  //   const me_ac = await this.extension.setSignerForAddress(me, this.api);
-  //   transfer.signAndSend(me, (result) => {
-  //     console.log(`Current status is ${result.status}`);
-
-  //     if (result.status.isInBlock) {
-  //       console.log(`Transaction included at blockHash ${result.status.asInBlock}`);
-  //       result.events.forEach(({ event: { data, method, section }, phase }) => {
-  //         console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
-  //       });
-  //     } else if (result.status.isFinalized) {
-  //       console.log(`Transaction finalized at blockHash ${result.status.asFinalized}`);
-
-  //     }
-  //   });
-
+    return new Promise((resolve)=>{
+      transfer.signAndSend(da, (result) => {
+        console.log(`Current status is ${result.status}`);
+  
+        if (result.status.isInBlock) {
+          console.log(`Transaction included at blockHash ${result.status.asInBlock}`);
+          result.events.forEach(({ event: { data, method, section }, phase }) => {
+            console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
+          });
+        } else if (result.status.isFinalized) {
+          console.log(`Transaction finalized at blockHash ${result.status.asFinalized}`);
+          resolve(true);
+        }
+      });
+    });
     
-
-  // }
+  }
 
   handle_events(events){
 

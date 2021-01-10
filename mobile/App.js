@@ -5,6 +5,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider, connect } from 'react-redux';
 
+
+
 import RootScreen from './screens/RootScreen';
 
 import Colors from './constants/Colors';

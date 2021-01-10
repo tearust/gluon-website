@@ -2,24 +2,25 @@ import types from '../type/user';
 import {_} from 'helper';
 
 const init_state = {
-  isLogin: false,
-  currentUser: null,
-  token: null
+  layer1_account: null,
+
+  pair_info: null,
+
+  qrcode: null,
 };
 
 
 export default (state=init_state, action)=>{
   state = _.clone(state);
   switch(action.type){
-    case types.LOGIN:
-      state.isLogin = true;
-      state.currentUser = action.user;
-      state.token = action.user.token || state.token;
+    case types.set_layer1_account:
+      state.layer1_account = action.param;
       break;
-    case types.LOGOUT:
-      state.isLogin = false;
-      state.token = null;
-      state.currentUser = null;
+    case types.set_pair_info:
+      state.pair_info = action.param;
+      break;
+    case types.set_qrcode:
+      state.qrcode = action.param;
       break;
   }
 

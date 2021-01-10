@@ -6,7 +6,11 @@ import BtcHome from '../screens/btc/Home';
 
 import ProfileHome from '../screens/profile/Profile';
 import Layer1AccountProfile from '../screens/profile/Layer1AccountProfile';
+import PairInfo from '../screens/profile/PairInfo';
+
 import Test from '../screens/profile/test';
+
+import ScanQrCodeModal from '../screens/modals/ScanQrCodeModal';
 
 export default {
   init_tab: 'tab_test',
@@ -46,7 +50,15 @@ export default {
 
   ],
   modal : [
-    
+    {
+      name: 'scan_qr_code_modal',
+      component: ScanQrCodeModal,
+      options: {
+        headerBackTitle: '',
+        headerTitle: '',
+        headerShown: false
+      }
+    }
   ],
 
   stack : [
@@ -54,6 +66,10 @@ export default {
       name: 'layer1_account_profile',
       component: Layer1AccountProfile,
     },
+    {
+      name: 'pair_info_profile',
+      component: PairInfo,
+    }
     
   ]
 }

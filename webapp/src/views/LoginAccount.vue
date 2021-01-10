@@ -22,6 +22,7 @@
 
     <div class="x-right">
       <el-button @click="showSelectLayer1()">CHANGE</el-button>
+      <el-button @click="rechargeHandler()">RECHARGE</el-button>
     </div>
   </div>
 
@@ -79,6 +80,7 @@ export default {
     this.wf = new SettingAccount();
     await this.wf.init();
 
+    this.refreshAccount();
     this.$root.loading(false);
 
   },
@@ -114,7 +116,29 @@ export default {
       }finally{
         this.$root.loading(false);
       }
+    },
+
+    async rechargeHandler(){
+      this.$root.loading(true);
+      await this.wf.layer1.faucet(this.layer1_account.address);
+      this.refreshAccount();
+      
+      this.$root.loading(false);
+    },
+
+    async refreshAccount(){
+      if(this.layer1_account){
+        const balance = await this.wf.layer1.getAccountBalance(this.layer1_account.address);
+        this.$store.commit('set_account', {
+          balance,
+          address: this.layer1_account.address,
+          ori_name: this.layer1_account.name,
+        });
+        console.log('===== refresh =====');
+      }
     }
   }
+
+  
 }
 </script>

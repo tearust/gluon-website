@@ -1,15 +1,23 @@
 import types from '../type/user';
 
 export default {
-  login(user){
+  setLayer1Account(account){
     return {
-      type: types.LOGIN,
-      user
+      type: types.set_layer1_account,
+      param: account,
     }
   },
-  logout(){
+  setPairInfo(pairInfo){
     return {
-      type: types.LOGOUT
+      type: types.set_pair_info,
+      param: pairInfo,
+    }
+  },
+
+  setQrcode(code_json){
+    return {
+      type: types.set_qrcode,
+      param: code_json,
     }
   }
 };

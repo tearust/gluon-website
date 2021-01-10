@@ -30,11 +30,22 @@ static void InitializeFlipper(UIApplication *application) {
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
+  
+  
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"mobile"
                                             initialProperties:nil];
+
+//  NSURL *jsCodeLocation;
+//  jsCodeLocation = [NSURL URLWithString:@"http://688612624392.ngrok.io/index.bundle?platform=ios&dev=true"];
+//  RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+//                                                        moduleName:@"mobile"
+//                                                 initialProperties:nil
+//                                                     launchOptions:launchOptions];
+  
+  
 
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 

@@ -1,5 +1,8 @@
 import Vuex from 'vuex';
-import Vue from 'vue'
+import Vue from 'vue';
+import _ from 'lodash';
+
+
 Vue.use(Vuex)
 
 

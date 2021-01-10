@@ -11,7 +11,7 @@ import forge from 'node-forge';
 import {cache} from 'helper';
 import gluon from './gluon';
 
-const LAYER1_URL = 'ws://127.0.0.1:9944';
+const LAYER1_URL = 'ws://139.198.187.91:9944';
 
 let _layer1 = null;
 export default class Layer1 {
@@ -195,6 +195,29 @@ export default class Layer1 {
     });
 
     return teaNodes;
+  }
+
+  async faucet(target_address){
+    const da = this.getDefaultAccount();
+    const total = new BN((1000*this.asUnit()).toString(), 10);
+    const transfer = this.api.tx.balances.transfer(target_address, total);
+
+    return new Promise((resolve)=>{
+      transfer.signAndSend(da, (result) => {
+        console.log(`Current status is ${result.status}`);
+  
+        if (result.status.isInBlock) {
+          console.log(`Transaction included at blockHash ${result.status.asInBlock}`);
+          result.events.forEach(({ event: { data, method, section }, phase }) => {
+            console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString());
+          });
+        } else if (result.status.isFinalized) {
+          console.log(`Transaction finalized at blockHash ${result.status.asFinalized}`);
+          resolve(true);
+        }
+      });
+    });
+    
   }
 }
 
