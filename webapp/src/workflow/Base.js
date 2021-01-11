@@ -6,6 +6,7 @@ import proto from '../tea/proto';
 import http from '../tea/http';
 import toHex from 'to-hex';
 import BN from 'bn.js';
+import store from '../store';
 
 
 
@@ -52,6 +53,26 @@ export default class {
 
   showSelectLayer1Modal(){
     utils.publish('tea-select-layer1-modal', true);
+  }
+
+  async refreshCurrentAccount(){
+    
+    const layer1_account = store.getters.layer1_account;
+    if(!layer1_account.address){
+      return false;
+    }
+
+    this._log.i("refresh current layer1_account");
+    const balance = await this.layer1.getAccountBalance(layer1_account.address);
+    const info = await this.gluon.getAccountProfile(layer1_account.address);
+
+    console.log(11, info);
+    
+    store.commit('set_account', {
+      balance,
+      address: layer1_account.address,
+      ori_name: layer1_account.name,
+    });
   }
   
 

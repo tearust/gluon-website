@@ -80,7 +80,7 @@ export default {
     this.wf = new SettingAccount();
     await this.wf.init();
 
-    this.refreshAccount();
+    await this.refreshAccount();
     this.$root.loading(false);
 
   },
@@ -127,15 +127,7 @@ export default {
     },
 
     async refreshAccount(){
-      if(this.layer1_account){
-        const balance = await this.wf.layer1.getAccountBalance(this.layer1_account.address);
-        this.$store.commit('set_account', {
-          balance,
-          address: this.layer1_account.address,
-          ori_name: this.layer1_account.name,
-        });
-        console.log('===== refresh =====');
-      }
+      await this.wf.refreshCurrentAccount();
     }
   }
 

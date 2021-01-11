@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { stringToHex, u8aToHex, promisify, } from '@polkadot/util';
+import _, { add } from 'lodash';
+import { stringToHex, u8aToHex, promisify, u8aToString } from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import forge from 'node-forge';
 
@@ -56,15 +56,12 @@ export default class {
   }
 
   async buildAccount(account){
-    if(this.env === 'browser'){
+    if(_.isString(account)){
       return await this.extension.setSignerForAddress(account, this.api);
     }
-
-    if(this.env === 'app'){
+    else{
       return account;
     }
-
-    throw 'invalid account In '+this.env;
   }
 
   sha256(data){
@@ -83,7 +80,6 @@ export default class {
     })
   }
 
-  // broswer side
   async sendNonceForPairMobileDevice(nonce, account_address){
     if(!nonce){
       throw 'Invalid nonce';
@@ -102,24 +98,36 @@ export default class {
     }); 
   }
 
-  // app side
-  async responePairWithNonce(nonce, account, pair_address){
+  async responePairWithNonce(nonce, account, pair_address, meta_json){
     if(!nonce){
       throw 'Invalid nonce';
     }
 
+    await this.buildAccount(account);
     const pub = decodeAddress(pair_address);
-    console.log('responePairWithNonce', nonce, u8aToHex(pub))
+    const meta = JSON.stringify(meta_json);
+    console.log('responePairWithNonce', nonce, u8aToHex(pub), forge.util.encode64(meta));
     await this.promisify(async (cb)=>{
       await this.api.tx.gluon.sendRegistrationApplication(
         nonce,
-        u8aToHex(pub)
+        u8aToHex(pub),
+        forge.util.encode64(meta),
       ).signAndSend(account, (param)=>{
         this._transactionCallback(param, cb);
       });
     })
   }
 
+  async unpair(account){
+    await this.buildAccount(account);
+    await this.promisify(async (cb)=>{
+      await this.api.tx.gluon.unpairAppBrowser(
+    
+      ).signAndSend(account, (param)=>{
+        this._transactionCallback(param, cb);
+      });
+    });
+  }
 
   _transactionCallback(param, cb){
     const { events = [], status } = param;
@@ -188,6 +196,32 @@ export default class {
     console.log("teaNodes", JSON.stringify(teaNodes));
 
     return teaNodes;
+  }
+
+  async _getAccountProfile(address){
+    const pub = decodeAddress(address);
+    const info = await this.api.query.gluon.appBrowserPair(pub);
+    return info;
+  }
+
+  async getAccountProfile(address){
+    address = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
+    const profile = {};
+    const me = await this._getAccountProfile(address);
+    console.log('query gluon.AppBrowserPair browser:', (me[0]));
+    
+    profile.address = address;
+    profile.meta = forge.util.decode64(u8aToString(me[1]));
+    const pair_address = encodeAddress(me[0]);
+    if(pair_address){
+      const pair = await this._getAccountProfile(pair_address);
+      profile.pair = {
+        address: pair_address,
+        meata: forge.util.decode64(u8aToString(pair[1])),
+      };
+    }
+
+    return profile;
   }
 
   

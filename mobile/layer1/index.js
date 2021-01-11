@@ -75,6 +75,8 @@ export default class Layer1 {
     const account = this.generateWithMnemonic(mn);
     account.mnemonic = mn;
     account.balance = await this.getAccountBalance(account.address);
+
+
     return account;
   }
 

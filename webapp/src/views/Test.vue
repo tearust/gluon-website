@@ -77,14 +77,18 @@ export default {
     },
 
     async mobileResponsePair(){
-      // if(!this.nonce){
-      //   return alert('pair first');
-      // }
       const ac = this.test.layer1.getDefaultAccount('Bob');
 
+      // console.log(ac.address);
+      if(!this.nonce){
+        return alert('pair first');
+      }
+      
       try{
-        const nonce = this.test.gluon.getRandomNonce(); //this.nonce;
-        await this.test.gluon.responePairWithNonce(nonce, ac, this.layer1_account.address);
+        const nonce = this.nonce;
+        await this.test.gluon.responePairWithNonce(nonce, ac, this.layer1_account.address, {
+          uuid: 'AAABBBCCCDDDEEEFFF',
+        });
 
       }catch(e){
         const err = e.message || e.toString();
