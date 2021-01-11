@@ -28,7 +28,7 @@
 
   <el-divider />
 
-  <div class="tea-card mb" v-if="this.bind_mobile.address">
+  <div class="tea-card mb" v-if="bind_mobile">
     <i class="x-icon el-icon-mobile-phone"></i>
 
     <div class="x-list">
@@ -44,12 +44,12 @@
     </div>
 
     <div class="x-right">
-      <el-button class="gray" >UNPAIR</el-button>
+      <el-button class="gray" @click="unpairHandler()" >UNPAIR</el-button>
     </div>
   </div>
 
-  <div class="tea-card flex-center gray" v-if="!this.bind_mobile.address">
-    <el-button @click="bindMobileHandler()" :disabled="!this.layer1_account.address" class="x-only-btn">BIND MOBILE</el-button>
+  <div class="tea-card flex-center gray" v-if="!bind_mobile">
+    <el-button @click="bindMobileHandler()" :disabled="!layer1_account.address" class="x-only-btn">BIND MOBILE</el-button>
   </div>
   
 </div>
@@ -104,9 +104,22 @@ export default {
           type: 'pair',
         };
 
+        // start listening
+        this.wf.gluon.buildCallback('RegistrationApplicationSucceed', (address1, address2)=>{
+          if(_.includes([address1, address2], address)){
+            this.wf.closeQrCodeModal();
+            this.refreshAccount();
+          }
+        })
+
         this.wf.showQrCodeModal({
           text: JSON.stringify(json),
         });
+
+        _.delay(()=>{
+          this.wf.closeQrCodeModal();
+            this.refreshAccount();
+        }, 5000);
       }catch(e){
         const err = e.message || e.toString();
         this.$alert(err, 'Layer1 Error', {
@@ -128,6 +141,35 @@ export default {
 
     async refreshAccount(){
       await this.wf.refreshCurrentAccount();
+    },
+
+    async unpairHandler(){
+      let f;
+      try{
+        await this.$confirm('Are you sure to unpair this device?', 'UNPAIR', {
+          confirmButtonText: 'CONFIRM',
+          cancelButtonText: 'CANCEL'
+        });
+        f = true;
+      }catch(e){
+        f = false;
+      }
+
+      if(!f) return false;
+      this.$root.loading(true);
+
+      try{
+        await this.wf.gluon.unpair(this.layer1_account.address);
+        await this.refreshAccount();
+
+      }catch(e){
+        const err = e.message || e.toString();
+        this.$alert(err, 'Layer1 Error', {
+          type: 'error'
+        });
+      }
+
+      this.$root.loading(false);
     }
   }
 

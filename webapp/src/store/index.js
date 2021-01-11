@@ -14,17 +14,16 @@ const store = new Vuex.Store({
       balance: null,
     },
 
-    bind_mobile: {
-      // address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-      // uuid: '29308409284023805283502845038453095803485308503',
-    },
+    // address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+    // uuid: '29308409284023805283502845038453095803485308503',
+    bind_mobile: null,
 
     btc_list: [
-      {
-        address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-        balance: 0.01,
-        pub: 'public_key',
-      }
+      // {
+      //   address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+      //   balance: 0.01,
+      //   pub: 'public_key',
+      // }
     ],
   },
 
@@ -44,7 +43,6 @@ const store = new Vuex.Store({
 
   mutations: {
     set_account(state, account){
-      // console.log(111, account)
       state.layer1_account = {
         name: account.ori_name,
         address: account.address,
@@ -54,11 +52,15 @@ const store = new Vuex.Store({
     },
 
     set_bind_mobile(state, opts){
-      console.log(111, opts)
-      state.bind_mobile = {
-        address: opts.address,
-        uuid: opts.uuid,
-      };
+      if(!opts){
+        state.bind_mobile = null;
+      }
+      else{
+        state.bind_mobile = {
+          address: opts.address,
+          uuid: opts.uuid,
+        };
+      }
     }
   }
 })

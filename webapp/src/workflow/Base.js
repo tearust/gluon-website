@@ -48,7 +48,11 @@ export default class {
       visible: true,
       text: opts.text,
     });
-    
+  }
+  closeQrCodeModal(){
+    utils.publish('tea-qrcode-modal', {
+      visible: false,
+    });
   }
 
   showSelectLayer1Modal(){
@@ -66,13 +70,21 @@ export default class {
     const balance = await this.layer1.getAccountBalance(layer1_account.address);
     const info = await this.gluon.getAccountProfile(layer1_account.address);
 
-    console.log(11, info);
-    
     store.commit('set_account', {
       balance,
       address: layer1_account.address,
       ori_name: layer1_account.name,
     });
+
+    if(info.pair_address){
+      store.commit('set_bind_mobile', {
+        address: info.pair_address,
+        uuid: info.pair_meta.uuid || ''
+      });
+    }
+    else{
+      store.commit('set_bind_mobile', null);
+    }
   }
   
 

@@ -67,6 +67,12 @@ export default {
         await this.test.gluon.sendNonceForPairMobileDevice(nonce, address);
         this.nonce = nonce;
         this.$message.success('success');
+
+        // start listening
+        this.test.gluon.buildCallback('RegistrationApplicationSucceed', (a, b)=>{
+          console.log(12, a, b);
+        })
+
       }catch(e){
         const err = e.message || e.toString();
         this.$alert(err, 'Layer1 Error', {
