@@ -76,6 +76,7 @@ export default class Layer1 {
     account.mnemonic = mn;
     account.balance = await this.getAccountBalance(account.address);
 
+    account.profile = await this.gluon.getAccountProfile(account.address);
 
     return account;
   }

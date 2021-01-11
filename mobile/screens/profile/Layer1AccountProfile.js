@@ -83,13 +83,13 @@ export default createContainer(class extends Base {
   }
 
   async componentDidMount(){
-    UI.loading(true);
+//     UI.loading(true);
 
-    const layer1 = await Layer1.get();
-    const ac = await layer1.getCurrentAccount();
-
-    this.props.setLayer1Account(ac);
-    UI.loading(false);
+//     const layer1 = await Layer1.get();
+//     const ac = await layer1.getCurrentAccount();
+// console.log(11, ac);
+//     this.props.setLayer1Account(ac);
+//     UI.loading(false);
   }
 
   

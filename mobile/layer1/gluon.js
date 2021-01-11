@@ -1,4 +1,4 @@
-import _, { add } from 'lodash';
+import _ from 'lodash';
 import { stringToHex, u8aToHex, promisify, u8aToString } from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import forge from 'node-forge';
@@ -47,6 +47,39 @@ export default class {
     this.extension = extension;
 
     this.env = env || 'browser';
+
+    this.api.query.system.events((events) => {
+      this._handle_events(events)
+    });
+  }
+
+  buildCallback(key, cb){
+    this.callback[key] = cb;
+  }
+
+  _handle_events(events){
+    _.each(events, (record) => {
+      const { event, phase } = record;
+      const types = event.typeDef;
+
+      if (event.section == 'gluon') {
+        let eventData = {}
+        event.data.forEach((data, index) => {
+          // console.log(`\t\t\t${types[index].type}: ${data.toString()}`);
+          eventData[types[index].type] = data
+        });
+
+        const data = event.data;
+        switch (event.method) {
+          case 'RegistrationApplicationSucceed':
+            console.log('new pair found, app:', encodeAddress(data[0]), "broswer:", encodeAddress(data[1]));
+            if(this.callback['RegistrationApplicationSucceed']){
+              this.callback['RegistrationApplicationSucceed'](encodeAddress(data[0]), encodeAddress(data[1]));
+            }
+            break;
+        }
+      }
+    });
   }
 
   getRandomNonce(){
@@ -170,58 +203,54 @@ export default class {
     return null;
   }
 
-  // async nodeByEphemeralId(eid, cb){
-  //   const teaId = await api.query.tea.ephemeralIds('0x'+eid);
-  //   if (teaId.isNone) {
-  //     cb(false);
-  //     return false;
-  //   }
-
-  //   const nodeObj = await api.query.tea.nodes(teaId.unwrap());
-  //   const node = nodeObj.toJSON();
-  //   console.log(111, node);
-
-  //   node.http = node.urls[0] ? utils.forge.util.hexToBytes(node.urls[0]) : '';
-
-  //   cb(true, node);
-  // }
-
-  async getTeaNodes(){
-    const nodes = await this.api.query.tea.nodes.entries();
-  
-    const teaNodes = _.slice(nodes, 0, 100).map((n) => {
-      return n[1]
-    })
-
-    console.log("teaNodes", JSON.stringify(teaNodes));
-
-    return teaNodes;
-  }
-
   async _getAccountProfile(address){
+    // const empty_address = '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM';
+    const empty_hex = '0x0000000000000000000000000000000000000000000000000000000000000000';
     const pub = decodeAddress(address);
-    const info = await this.api.query.gluon.appBrowserPair(pub);
-    return info;
-  }
+    let profile = {
+      address,
+    };
 
-  async getAccountProfile(address){
-    address = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
-    const profile = {};
-    const me = await this._getAccountProfile(address);
-    console.log('query gluon.AppBrowserPair browser:', (me[0]));
+    // const x = await this.api.query.gluon.browserAppPair(pub);
+    // const y = await this.api.query.gluon.appBrowserPair(pub);
+    // console.log(11, forge.util.decode64(u8aToString(x[1])), encodeAddress(x[0]))
+    // console.log(22, forge.util.decode64(u8aToString(y[1])), encodeAddress(y[0]))
     
-    profile.address = address;
-    profile.meta = forge.util.decode64(u8aToString(me[1]));
-    const pair_address = encodeAddress(me[0]);
-    if(pair_address){
-      const pair = await this._getAccountProfile(pair_address);
-      profile.pair = {
-        address: pair_address,
-        meata: forge.util.decode64(u8aToString(pair[1])),
-      };
+    let me = await this.api.query.gluon.browserAppPair(pub);
+    if(u8aToHex(me[0]) === empty_hex){
+      me = await this.api.query.gluon.appBrowserPair(pub);
+    }
+
+    if(u8aToHex(me[0]) === empty_hex){
+      profile.meta = null;
+      profile.pair_address = null;
+    }
+    else{
+      profile.pair_address = encodeAddress(me[0]);
+      profile.meta = forge.util.decode64(u8aToString(me[1]));
+      try{
+        profile.meta = JSON.parse(profile.meta);
+      }catch(e){
+        throw 'Invalid meta data => '+profile.meta;
+      }
     }
 
     return profile;
+  }
+
+  async getAccountProfile(address){
+    const me = await this._getAccountProfile(address);
+    if(!me.pair_address){
+      return {
+        ...me,
+        pair_meta: null,
+      };
+    }
+
+    const pair = await this._getAccountProfile(me.pair_address);
+    me.pair_meta = pair.meta;
+
+    return me;
   }
 
   

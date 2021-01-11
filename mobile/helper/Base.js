@@ -1,5 +1,6 @@
 import React from 'react';
 import {EStyle, _} from './utils';
+import pubsub from './pubsub';
 
 export default class Base extends React.Component{
 	constructor(p){
@@ -9,6 +10,14 @@ export default class Base extends React.Component{
 		this.state = this._defineState();
 
 		this._props = this._defineMainProperty();
+
+		if(this.props.route && this.props.route.name){
+			const name = this.props.route.name;
+			pubsub.subscribe('route-change__'+name, ()=>{
+				this.componentActive();
+			})
+		}
+
 		this._init();
 		
 	}
@@ -57,8 +66,9 @@ export default class Base extends React.Component{
 		return _.get(this.props.route, 'params', {});
 	}
 
+
 	_autorun(){}
 	_autorunAfter(){}
 
-	
+	componentActive(){}
 };

@@ -12,11 +12,14 @@ import Styles from '../../constants/Styles';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 
+import userAction from '../../store/action/user';
+
 
 export default createContainer(class extends Base {
   
   renderMain(p, s){
     
+    const {pair_info} = this.props;
     return (
       <ScrollPageView 
         header={this.renderHeader()} 
@@ -34,7 +37,7 @@ export default createContainer(class extends Base {
 
         {this.renderEachListItem({
           title: 'PAIR INFO',
-          status: false,
+          status: !!pair_info,
           cb(){
             this._goPath('pair_info_profile')
           }
@@ -76,9 +79,25 @@ export default createContainer(class extends Base {
     )
   }
 
+  async componentDidMount(){
+    
+  }
+
+  async componentActive(){
+    UI.loading(true);
+    await this.props.refreshAccount();
+    UI.loading(false);
+  }
+  
   
 }, (state)=>{
-  return {};
-}, ()=>{
-  return {};
+  return {
+    pair_info: state.user.pair_info,
+  };
+}, (dispatch)=>{
+  return {
+    refreshAccount(){
+      dispatch(userAction.refresh())
+    }
+  };
 });

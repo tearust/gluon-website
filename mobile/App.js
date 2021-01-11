@@ -86,6 +86,17 @@ const RootApp = (props)=>{
 
   }, []);
 
+  const onStateChange = (e, x)=>{
+    const route = containerRef.current.getCurrentRoute();
+    const name = route.name || null;
+
+    if(name){
+      console.log('[navigation enter] => '+name);
+      pubsub.publish('route-change__'+name);
+    }
+    
+  }
+
 
   if (!isLoadingComplete) {
     return null;
@@ -94,7 +105,7 @@ const RootApp = (props)=>{
       <AntdProvider>
       <View style={{flex: 1}}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+        <NavigationContainer ref={containerRef} initialState={initialNavigationState} onStateChange={onStateChange}>
           <Stack.Navigator headerMode="none">
             
               <Stack.Screen name="Root" component={RootScreen} />

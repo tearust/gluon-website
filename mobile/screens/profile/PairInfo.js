@@ -61,7 +61,10 @@ export default createContainer(class extends Base {
     
     return (
       <List renderHeader={'Request Info'}>
-        <List.Item extra={address} arrow="empty">
+        <List.Item extra={'aaa'}>
+          UUID
+        </List.Item>
+        <List.Item extra={address}>
           Pair Address
         </List.Item>
         <List.Item extra={nonce}>
