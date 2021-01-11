@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import Text from '../../components/Text';
 import Header from '../../components/Header';
 import {Progress, List} from '@ant-design/react-native';
-
+import DeviceInfo from 'react-native-device-info';
 
 import Styles from '../../constants/Styles';
 import Colors from '../../constants/Colors';
@@ -18,6 +18,12 @@ import userAction from '../../store/action/user';
 
 
 export default createContainer(class extends Base {
+
+  _defineState(){
+    return {
+      uuid: null,
+    }
+  }
 
   renderMain(p, s){
     const sy = {
@@ -43,7 +49,17 @@ export default createContainer(class extends Base {
   }
 
   renderPairInfo(info){
-    return null;
+    const {address, meta} = info;
+    return (
+      <List renderHeader={'PAIR INFO'}>
+
+        <List.Item extra={address} wrap={true}>
+          Pair Address
+        </List.Item>
+
+        
+      </List>
+    );
   }
 
   renderNoPairInfo(){
@@ -60,14 +76,14 @@ export default createContainer(class extends Base {
     }
     
     return (
-      <List renderHeader={'Request Info'}>
-        <List.Item extra={'aaa'}>
+      <List renderHeader={'PAIR REQUEST'}>
+        <List.Item extra={this.state.uuid} wrap={true}>
           UUID
         </List.Item>
-        <List.Item extra={address}>
+        <List.Item extra={address} wrap={true}>
           Pair Address
         </List.Item>
-        <List.Item extra={nonce}>
+        <List.Item extra={nonce} wrap={true}>
           Nonce
         </List.Item>
 
@@ -111,16 +127,20 @@ export default createContainer(class extends Base {
   }
 
   async pairHandler(json){
-    UI.log(json);
+
     const layer1 = await Layer1.get();
     
     UI.loading(true);
     try{
       const ac = await layer1.getCurrentAccount();
       
-      await layer1.gluon.responePairWithNonce(json.nonce, ac, json.address);
+      await layer1.gluon.responePairWithNonce(json.nonce, ac, json.address, {
+        uuid: this.state.uuid,
+      });
       
       UI.success('Pair Success');
+
+      await this.props.setPairInfo();
 
     }catch(e){
       const err = e.toString();
@@ -132,8 +152,8 @@ export default createContainer(class extends Base {
 
   async componentDidMount(){
     UI.loading(true);
-
-    
+    const uuid = DeviceInfo.getUniqueId();
+    this.setState({uuid});
     UI.loading(false);
   }
 
@@ -149,8 +169,8 @@ export default createContainer(class extends Base {
 }, (dispatch, props)=>{
   
   return {
-    setPairInfo(info){
-      dispatch(userAction.setPairInfo(info));
+    setPairInfo(){
+      dispatch(userAction.refresh());
     }
   };
 })

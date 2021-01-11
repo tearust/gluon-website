@@ -116,10 +116,6 @@ export default {
           text: JSON.stringify(json),
         });
 
-        _.delay(()=>{
-          this.wf.closeQrCodeModal();
-            this.refreshAccount();
-        }, 5000);
       }catch(e){
         const err = e.message || e.toString();
         this.$alert(err, 'Layer1 Error', {

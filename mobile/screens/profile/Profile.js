@@ -84,9 +84,10 @@ export default createContainer(class extends Base {
   }
 
   async componentActive(){
-    UI.loading(true);
-    await this.props.refreshAccount();
-    UI.loading(false);
+    _.delay(()=>{
+      this.props.refreshAccount();
+    }, 10);
+    
   }
   
   

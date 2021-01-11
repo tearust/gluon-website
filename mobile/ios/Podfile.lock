@@ -314,6 +314,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.10):
     - React
+  - RNDeviceInfo (8.0.0):
+    - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
   - RNPermissions (3.0.0):
@@ -381,6 +383,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -466,6 +469,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
@@ -522,6 +527,7 @@ SPEC CHECKSUMS:
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
   RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
+  RNDeviceInfo: 72ded653ce636b3f03571e90bed99309a714944e
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNPermissions: 350964d19150b183796a88180fb7ec62a1e41422
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
@@ -530,6 +536,6 @@ SPEC CHECKSUMS:
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 6befe50373c4429f79e9189491b55de23188c19b
+PODFILE CHECKSUM: c8c654b30e83fa5ccd87257273316f82bec5f8d5
 
 COCOAPODS: 1.10.0

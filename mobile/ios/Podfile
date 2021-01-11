@@ -17,6 +17,8 @@ target 'mobile' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
   target 'mobileTests' do
     inherit! :complete
     # Pods for testing
