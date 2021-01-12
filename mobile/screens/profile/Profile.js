@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Input, Image, Icon, ListItem, Avatar} from 'react-native-elements';
 import {Base, _, UI, createContainer} from 'helper';
 import {ScrollPageView} from '../../components/Page';
-import {View} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import Text from '../../components/Text';
 import Header from '../../components/Header';
 import {Progress} from '@ant-design/react-native';
@@ -71,23 +71,31 @@ export default createContainer(class extends Base {
         title="Profile"
         leftComponent={null}
         rightComponent={
-          <View style={{flex:1, flexDirection:'row', width:60, top: 10, right: 15, justifyContent:'space-between'}}>
-            
-          </View>
+          <TouchableOpacity onPress={this.refresh.bind(this)}>
+            <Icon type="ionicon" name="reload-circle-outline" color="#fff" size={28} />
+          </TouchableOpacity>   
         }
       />
     )
   }
 
-  async componentDidMount(){
+  async refresh(){
+    UI.loading(true);
+
+    await this.props.refreshAccount();
+    _.delay(async ()=>{
+      
+      UI.loading(false);
+    }, 1000);
     
   }
 
   async componentActive(){
-    _.delay(()=>{
-      this.props.refreshAccount();
-    }, 10);
-    
+  
+  }
+
+  async componentDidMount(){
+    await this.refresh();
   }
   
   

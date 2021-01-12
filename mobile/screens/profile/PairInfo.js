@@ -139,7 +139,7 @@ export default createContainer(class extends Base {
       });
       
       UI.success('Pair Success');
-
+      this.props.removeQrcode();
       await this.props.setPairInfo();
 
     }catch(e){
@@ -171,6 +171,9 @@ export default createContainer(class extends Base {
   return {
     setPairInfo(){
       dispatch(userAction.refresh());
+    },
+    removeQrcode(){
+      dispatch(userAction.setQrcode(null));
     }
   };
 })
