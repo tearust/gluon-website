@@ -5,7 +5,8 @@
   "scripts": {
     "start": "npm run dapp",
     "dapp": "vue-cli-service serve --mode dapp",
-    "build:dapp": "vue-cli-service build --mode dapp"
+    "build": "vue-cli-service build --mode dapp",
+    "deploy:ipfs_to_kevin": "ipfs add -r dist --api /ip4/64.227.49.206/tcp/5001/p2p/12D3KooWGBSAMDBcH6PfwGRaRiYSebCurSFNT8mYBNPbvoq66YtK"
   },
   "dependencies": {
     "@polkadot/api": "2.1.1",
