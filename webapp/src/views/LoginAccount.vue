@@ -22,7 +22,7 @@
 
     <div class="x-right">
       <el-button @click="showSelectLayer1()">CHANGE</el-button>
-      <el-button @click="rechargeHandler()">RECHARGE</el-button>
+      <el-button v-if="layer1_account.address" @click="rechargeHandler()">RECHARGE</el-button>
     </div>
   </div>
 

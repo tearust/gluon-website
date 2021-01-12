@@ -34,10 +34,11 @@ const store = new Vuex.Store({
       }
       const ll = localStorage.getItem('tea-layer1-account');
       if(ll){
+        
         return JSON.parse(ll);
       }
 
-      return null;
+      return state.layer1_account;
     }
   },
 

@@ -34,7 +34,7 @@ new Vue({
   store,
   methods: {
     isDev(){
-      return process.env.NODE_ENV === 'development';
+      return true;
     },
     loading(f, text='Loading...'){
       if(f){
