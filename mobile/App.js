@@ -9,11 +9,14 @@ import { Provider, connect } from 'react-redux';
 
 import RootScreen from './screens/RootScreen';
 
+import PrivatePasswordModal from './screens/modals/PrivatePasswordModal';
+
 import Colors from './constants/Colors';
 
 import store from './store';
+import userAction from './store/action/user';
 
-import {cache, pubsub, _} from 'helper';
+import {cache, pubsub, _, UI} from 'helper';
 import {Provider as AntdProvider} from '@ant-design/react-native';
 
 
@@ -54,7 +57,7 @@ const RootApp = (props)=>{
   const [isLoadingComplete, setLoadingComplete] = React.useState(true);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
-  // const { getInitialState } = useLinking(containerRef);
+  const privatePasswordRef = React.useRef();
 
   const [globalLoading, setGlobalLoading] = React.useState(false);
   
@@ -65,13 +68,20 @@ const RootApp = (props)=>{
       try {
         
 
-        
-
         // init pubsub
         pubsub.subscribe('app-loading', (f)=>{
           setGlobalLoading(f);   
         });
         
+        pubsub.subscribe('app-private-password', (visible=false, mode='set', cb)=>{
+          const ref = privatePasswordRef.current;
+          if(visible){
+            ref.open(mode, cb);
+          }
+        });
+
+        // init password
+        await store.dispatch(userAction.initPassword());
 
 
       } catch (e) {
@@ -111,8 +121,10 @@ const RootApp = (props)=>{
               <Stack.Screen name="Root" component={RootScreen} />
           </Stack.Navigator>
         </NavigationContainer>
+
+        <PrivatePasswordModal ref={privatePasswordRef} />
         {globalLoading && renderLaoding()}
-      </View>
+      </View> 
       </AntdProvider>
     );
   }

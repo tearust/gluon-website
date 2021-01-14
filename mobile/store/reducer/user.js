@@ -7,6 +7,8 @@ const init_state = {
   pair_info: null,
 
   qrcode: null,
+
+  encrypted_password: null,
 };
 
 
@@ -21,6 +23,9 @@ export default (state=init_state, action)=>{
       break;
     case types.set_qrcode:
       state.qrcode = action.param;
+      break;
+    case types.set_encrypted_password:
+      state.encrypted_password = action.param;
       break;
   }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { _, pubsub } from 'helper';
+import { _, pubsub, UI } from 'helper';
 import Router from '../constants/Router';
 
 const Modal = createStackNavigator();
@@ -63,6 +63,7 @@ export default (props)=>{
     pubsub.subscribe('app-go-push', (name)=>{
       props.navigation.navigate(name);
     })
+
   }, []);
 
   return (

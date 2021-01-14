@@ -1,16 +1,20 @@
 import React from 'react';
 import {Button, Input, Image, Icon, ListItem} from 'react-native-elements';
-import {Base, _, UI, Btc, pubsub} from 'helper';
+import {Base, _, UI, Btc, pubsub, crypto} from 'helper';
 import {ScrollPageView} from '../../components/Page';
 import {View} from 'react-native';
 import Text from '../../components/Text';
 import Header from '../../components/Header';
-import {Progress, Card} from '@ant-design/react-native';
+import {Progress, Card, Modal} from '@ant-design/react-native';
 import Layer1 from '../../layer1';
 
 
 import Styles from '../../constants/Styles';
 import Layout from '../../constants/Layout';
+
+import store from '../../store';
+import userTypes from '../../store/type/user';
+import userAction from '../../store/action/user';
 
 
 export default class extends Base {
@@ -45,9 +49,30 @@ export default class extends Base {
         </Card>
 
         <Card>
+          <Card.Header title="CRYPTO" />
+          <Card.Body>
+            <Button title={'AES'} onPress={this.aesHandler.bind(this)} />
+            <Button title={'DES'} onPress={this.desHandler.bind(this)} />
+            
+          </Card.Body>
+        </Card>
+
+        <Card>
           <Card.Header title="UTILITY" />
           <Card.Body>
             <Button title={'SCAN QRCODE'} onPress={this.openScanQrcodeModal.bind(this)} />
+            <Button title={'Set Password Modal'} onPress={this.openPrivatePasswordModal.bind(this, 'set')} />
+            <Button title={'Verify Password Modal'} onPress={this.openPrivatePasswordModal.bind(this, 'verify')} />
+            
+          </Card.Body>
+        </Card>
+
+        <Card>
+          <Card.Header title="USER" />
+          <Card.Body>
+            <Button title={'REMOVE PASSWORD'} onPress={this.removePassword.bind(this)} />
+            <Button title={'VERIFY PASSWORD'} onPress={this.verifyPassword.bind(this)} />
+            
             
           </Card.Body>
         </Card>
@@ -58,6 +83,36 @@ export default class extends Base {
         
       </ScrollPageView>
     );
+  }
+
+  removePassword(){
+    store.dispatch({
+      type: userTypes.set_encrypted_password,
+      param: null,
+    })
+  }
+
+  async verifyPassword(){
+    try{
+      const rs = await store.dispatch(userAction.verifyPassword());
+      alert(rs);
+    }catch(e){
+
+    }
+  }
+
+  aesHandler(){
+    const password = 'jacky.li';
+    const data = 'hello world';
+
+    const aes_rs = crypto.aes(password, data);
+    this.setState({text: aes_rs});
+  }
+
+  desHandler(){
+    const password = 'jacky.li';
+    const des_rs = crypto.des(password, this.state.text);
+    UI.log(des_rs);
   }
 
   openScanQrcodeModal(){
@@ -97,7 +152,15 @@ export default class extends Base {
     )
   }
 
-  
+  async openPrivatePasswordModal(mode){
+    try{
+      const pwd = await UI.showPrivatePasswordModal(mode);
+      alert(pwd);
+    }catch(e){
+
+    }
+    
+  }
 
   async componentDidMount(){
     

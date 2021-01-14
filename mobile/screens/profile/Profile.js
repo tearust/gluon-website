@@ -19,19 +19,34 @@ export default createContainer(class extends Base {
   
   renderMain(p, s){
     
-    const {pair_info} = this.props;
+    const {pair_info, has_password} = this.props;
     return (
       <ScrollPageView 
         header={this.renderHeader()} 
         style={{paddingTop: 0}}
         contentStyle={{paddingLeft:0, paddingRight:0}}
       >
+
+        {this.renderEachListItem({
+          title: has_password ? 'Change Password' : 'Set Password',
+          status: has_password,
+          cb(){
+            if(true || !has_password){
+              this.props.setPassword().then(()=>{
+                UI.success();
+              })
+            }
+          }
+        })}
         
         {this.renderEachListItem({
           title: 'LAYER1 ACCOUNT',
           status: true,
           cb(){
-            this._goPath('layer1_account_profile')
+            if(this.checkPassword()){
+              this._goPath('layer1_account_profile');
+            }
+            
           }
         })}
 
@@ -39,12 +54,24 @@ export default createContainer(class extends Base {
           title: 'PAIR INFO',
           status: !!pair_info,
           cb(){
-            this._goPath('pair_info_profile')
+            if(this.checkPassword()){
+              this._goPath('pair_info_profile');
+            }
+            
           }
         })}
 
       </ScrollPageView>
     );
+  }
+
+  checkPassword(){
+    if(!this.props.has_password){
+      UI.error('Please Set Password.');
+      return false;
+    }
+
+    return true;
   }
 
   renderEachListItem(item){
@@ -100,13 +127,19 @@ export default createContainer(class extends Base {
   
   
 }, (state)=>{
+  
   return {
     pair_info: state.user.pair_info,
+    has_password: !!state.user.encrypted_password,
   };
 }, (dispatch)=>{
   return {
     refreshAccount(){
       dispatch(userAction.refresh())
+    },
+
+    async setPassword(){
+      await dispatch(userAction.setPassword())
     }
   };
 });

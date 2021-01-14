@@ -71,6 +71,19 @@ const F = {
   goTab(name){
     F.goPath('tab');
     pubsub.publish('app-set-tab', name);
+  },
+
+  async showPrivatePasswordModal(mode='set'){
+    return new Promise((resolve, reject)=>{
+      pubsub.publish('app-private-password', true, mode, (text)=>{
+        if(text){
+          resolve(text);
+        }
+        else{
+          reject();
+        }
+      })
+    })
   }
 };
 

@@ -1,6 +1,12 @@
 import types from '../type/user';
 
 import Layer1 from '../../layer1';
+import {UI, cache, crypto} from 'helper';
+
+const C = {
+  password_key: 'tea-password',
+  password_val: 'gluon-wallet',
+};
 
 export default {
   setLayer1Account(account){
@@ -45,6 +51,45 @@ export default {
           meta: profile.pair_meta,
         } : null,
       })
+    }
+  },
+
+  initPassword(){
+    return async(dispatch)=>{
+      const encrypted = await cache.get(C.password_key);
+      if(encrypted){
+        dispatch({
+          type: types.set_encrypted_password,
+          param: encrypted
+        });
+      }
+    }
+  },
+  setPassword(){
+    return async (dispatch)=>{
+      const pwd = await UI.showPrivatePasswordModal('set');
+      
+      const encrypted = crypto.aes(pwd, C.password_val);
+      await cache.set(C.password_key, encrypted);
+
+      dispatch({
+        type: types.set_encrypted_password,
+        param: encrypted
+      });
+      return true;
+    }
+  },
+  verifyPassword(){
+    return async (dispatch, getState)=>{
+      const {user} = getState();
+      if(!user.encrypted_password){
+        return false;
+      }
+
+      const pwd = await UI.showPrivatePasswordModal('verify');
+      const text = crypto.des(pwd, user.encrypted_password);
+
+      return text === C.password_val;
     }
   }
 };

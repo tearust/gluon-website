@@ -58,7 +58,8 @@ export default {
         headerTitle: '',
         headerShown: false
       }
-    }
+    },
+    
   ],
 
   stack : [

@@ -8,4 +8,6 @@ export default {
   'set_pair_info': set('set_pair_info'),
 
   'set_qrcode': set('set_qrcode'),
+
+  'set_encrypted_password': set('set_encrypted_password'),
 };

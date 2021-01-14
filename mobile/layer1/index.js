@@ -1,7 +1,7 @@
 
 import { ApiPromise, Keyring, WsProvider } from '@polkadot/api';
 import { cryptoWaitReady, mnemonicGenerate } from '@polkadot/util-crypto';
-import _ from 'lodash';
+import {_, UI} from 'helper';
 import types from './types';
 const rpc = require('./rpc');
 
@@ -29,6 +29,7 @@ export default class Layer1 {
   constructor(){
     this.api = null;
     this.callback = {};
+
 
     this.gluon = null;
   }

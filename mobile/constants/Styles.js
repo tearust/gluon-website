@@ -20,5 +20,31 @@ export default {
 
   ikea: {
     // fontFamily: 'IKEA',
+  },
+
+
+  // antd
+  confirm_button: {
+    style: {
+      backgroundColor: '#35a696',
+      height: 40,
+    },
+    styles: {
+      defaultRawText: {
+        fontSize: 15,
+        color: '#fff',
+      }
+    }
+  },
+
+  cancel_button: {
+    style: {
+      height: 40,
+    },
+    styles: {
+      defaultRawText: {
+        fontSize: 15,
+      }
+    }
   }
 };
