@@ -19,6 +19,8 @@ target 'mobile' do
 
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
+  pod 'TouchID', :path => '../node_modules/react-native-touch-id'
+
   target 'mobileTests' do
     inherit! :complete
     # Pods for testing

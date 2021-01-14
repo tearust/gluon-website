@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import {Progress, Card, Modal} from '@ant-design/react-native';
 import Layer1 from '../../layer1';
 
+import TouchID from 'react-native-touch-id';
 
 import Styles from '../../constants/Styles';
 import Layout from '../../constants/Layout';
@@ -42,9 +43,9 @@ export default class extends Base {
         </Card>
 
         <Card>
-          <Card.Header title="LAYER1" />
+          <Card.Header title="NATIVE" />
           <Card.Body>
-            
+          <Button title={'NATIVE TOUCH ID'} onPress={this.nativeTouchId.bind(this)} />
           </Card.Body>
         </Card>
 
@@ -90,6 +91,20 @@ export default class extends Base {
       type: userTypes.set_encrypted_password,
       param: null,
     })
+  }
+
+  nativeTouchId(){
+    TouchID.authenticate('to demo this react-native component', {
+
+    })
+    .then((success) => {
+      UI.log(success);
+    })
+    .catch(error => {
+      console.error(error);
+      UI.log(error);
+    });
+
   }
 
   async verifyPassword(){
