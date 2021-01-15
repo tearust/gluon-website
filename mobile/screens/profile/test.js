@@ -95,7 +95,8 @@ export default class extends Base {
 
   nativeTouchId(){
     TouchID.authenticate('to demo this react-native component', {
-
+      passcodeFallback: true,
+      
     })
     .then((success) => {
       UI.log(success);

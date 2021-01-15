@@ -1,21 +1,27 @@
 <template>
 <div class="tea-page">
-  <!-- <h4>Test Page</h4> -->
 
-  <el-button type="primary" @click="showQrCode()">SHOW QR CODE</el-button>
+  <h4>UTILITY</h4>
+  <div class="t-box">
+    <el-button type="primary" @click="showQrCode()">SHOW QR CODE</el-button>
+    <el-button type="primary" @click="showSelectLayer1()">SELECT LAYER1</el-button>
+    <!-- <el-button type="primary" @click="getTeaNodes()">GET TEA NODES</el-button> -->
+  </div>
   <el-divider />
 
-  <el-button type="primary" @click="showSelectLayer1()">SELECT LAYER1</el-button>
+  <h4>LAYER1 - PAIR</h4>
+  <div class="t-box">
+    <el-button type="primary" @click="pairWithMobile()">PAIR WITH MOBILE</el-button>
+    <el-button type="primary" @click="mobileResponsePair()">MOBILE RESPONSE PAIR</el-button>
+  </div>
   <el-divider />
 
-  <el-button type="primary" @click="getTeaNodes()">GET TEA NODES</el-button>
+  <h4>LAYER1 - GENERATE ACCOUNT</h4>
+  <div class="t-box">
+    <el-button type="primary" @click="getDelegatorList()">GET DELEGATORS</el-button>
+  </div>
   <el-divider />
 
-  <el-button type="primary" @click="pairWithMobile()">PAIR WITH MOBILE</el-button>
-  <el-divider />
-
-  <el-button type="primary" @click="mobileResponsePair()">MOBILE RESPONSE PAIR</el-button>
-  <el-divider />
 
 </div>
 </template>
@@ -107,8 +113,37 @@ export default {
 
     async getTeaNodes(){
       const nodes = this.test.gluon.getTeaNodes();
-    }
+    },
+
+    async getDelegatorList(){
+      try{
+        
+        const list = await this.test.gluon.getDelegatorList();
+
+      }catch(e){
+        this.showError(e);
+      }
+    },
+
+
+
+
+    
+
+
+    showError(e){
+      const err = e.message || e.toString();
+      this.$alert(err, 'Layer1 Error', {
+        type: 'error'
+      });
+    },
   },
 
 }
 </script>
+<style lang="scss">
+.t-box{
+  display: flex;
+  flex-direction: 'row';
+}
+</style>

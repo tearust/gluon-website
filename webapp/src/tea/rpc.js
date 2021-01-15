@@ -1,32 +1,28 @@
 const rpc = {
   tea: {
-        getNodeByEphemeralId: {
-              description: 'Just a test method',
-              params: [
-                {
-                  name: 'ephemeralId',
-                  type: 'String'
-                },
-                {
-                  name: 'at',
-                  type: 'Hash',
-                  isOptional: true
-                }
-              ],
-              type: 'Option<Node>'
-        },
-        getSum: {
-              description: 'Just a test method',
-              params: [
-                {
-                  name: 'at',
-                  type: 'Hash',
-                  isOptional: true
-                }
-              ],
-              type: 'u32'
-        }
+
+  },
+  gluon: {
+    getDelegates: {
+        description: 'get delegates',
+        params: [
+          {
+            name: 'start',
+            type: 'u64'
+          },
+          {
+            name: 'count',
+            type: 'u64'
+          },
+          {
+            name: 'at',
+            type: 'Hash',
+            isOptional: true
+          }
+        ],
+        type: 'Vec<TeaPubKey>'
+    },
   }
 }
 
-module.exports = rpc;
+module.exports = rpc

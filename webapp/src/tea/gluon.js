@@ -253,5 +253,13 @@ export default class {
     return me;
   }
 
+  async getDelegatorList(startPosition=0){
+    const neededDelegatesCount = 100;
+    const delegates = await this.api.rpc.gluon.getDelegates(startPosition, neededDelegatesCount);
+    console.log('gluon_getDelegates result:', delegates.toJSON())
+
+    return delegates;
+  }
+
   
 }
