@@ -78,10 +78,13 @@ const types = {
   },
   RuntimeActivity: {
     teaId: 'TeaPubKey',
-    cid: 'Cid',
+    cid: 'Option<Cid>',
     ephemeralId: 'TeaPubKey',
     updateHeight: 'BlockNumber'
   },
+  //////////////
+  //  gluon   //
+  //////////////
   AccountAsset: {
     accountId: "Cid",
     btc: "Vec<Cid>",
@@ -100,17 +103,16 @@ const types = {
     delegatorNonceRsa: "Cid",
     p1: "Cid"
   },
-  KeyGenerationResult: {
-    taskId: "Cid",
-    delegatorNonce: "Cid",
-    p2: "Cid",
-    p2DeploymentIds: "Vec<Cid>",
-    multiSigAccount: "Cid"
-  },
   SignTransactionData: {
     dataAdhoc: "TxData",
     delegatorNonceHash: "Cid",
     delegatorNonceRsa: "Cid"
+  },
+  SignTransactionTask: {
+    taskId: "Cid",
+    multisigAddress: "Cid",
+    p1Signature: "TxData",
+    taskData: "SignTransactionData"
   },
   SignTransactionResult: {
     taskId: "Cid",

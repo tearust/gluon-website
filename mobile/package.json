@@ -25,6 +25,7 @@
     "@substrate/txwrapper": "3.10.6",
     "axios": "0.21.1",
     "bs58": "^4.0.1",
+    "js-sha256": "^0.9.0",
     "lodash": "4.17.20",
     "moment": "2.29.1",
     "node-forge": "^0.10.0",

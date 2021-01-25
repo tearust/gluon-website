@@ -19,6 +19,8 @@
   <h4>LAYER1 - GENERATE ACCOUNT</h4>
   <div class="t-box">
     <el-button type="primary" @click="getDelegatorList()">GET DELEGATORS</el-button>
+    <el-button type="primary" @click="browserGenerateAccount()">BROWSER GENERATE ACCOUNT</el-button>
+    <el-button type="primary" @click="appGenerateAccount()">APP GENERATE ACCOUNT</el-button>
   </div>
   <el-divider />
 
@@ -33,6 +35,8 @@ export default {
   data(){
     return {
       nonce: null,
+
+      generate_account: null,
     };
   },
 
@@ -125,9 +129,32 @@ export default {
       }
     },
 
+    async browserGenerateAccount(){
+      try{
+        const d = await this.test.gluon.browserGenerateAccount(this.layer1_account.address, 'btc');
+        this.generate_account = d;
+      }catch(e){
+        this.showError(e);
+      }
+    },
 
+    async appGenerateAccount(){
+      if(!this.generate_account){
+        alert('error');
+        return false;
+      }
+      try{
+        const ga = this.generate_account;
+        const ac = this.test.layer1.getDefaultAccount('Bob');
+        const d = await this.test.gluon.appGenergateAccount(
+          ac, ga.nonce, ga.nonce_hash, ga.nonce_rsa, ga.key_type, ga.p1, ga.p2_n, ga.p2_k, 
+          this.layer1_account.address
+        );
 
-
+      }catch(e){
+        this.showError(e);
+      }
+    },
     
 
 

@@ -26,13 +26,15 @@
   <el-divider v-if="btc_list.length>0" />
   
   <div class="tea-card flex-center gray">
-    <el-button class="x-only-btn" icon="el-icon-plus">ADD BTC</el-button>
+    <el-button class="x-only-btn" icon="el-icon-plus" @click="browserGenerateAccount()">ADD BTC</el-button>
   </div>
 
 </div>
 </template>
 <script>
-import {mapState} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
+import Base from '../workflow/Base';
+import _ from 'lodash';
 export default {
   data() {
     return {
@@ -40,12 +42,33 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'layer1_account'
+    ]),
     ...mapState([
       'btc_list'
     ]),
   },
+  async mounted(){
+    this.$root.loading(true);
+
+    this.wf = new Base();
+    await this.wf.init();
+
+    this.$root.loading(false);
+
+  },
   methods: {
-    
+    async browserGenerateAccount(){
+      try{
+        const json = await this.wf.gluon.browserGenerateAccount(this.layer1_account.address, 'btc');
+        this.wf.showQrCodeModal({
+          text: JSON.stringify(json),
+        });
+      }catch(e){
+        this.showError(e);
+      }
+    },
   }
 }
 </script>

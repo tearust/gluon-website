@@ -1,7 +1,10 @@
 import _ from 'lodash';
-import { stringToHex, u8aToHex, promisify, u8aToString } from '@polkadot/util';
+import { stringToHex, stringToU8a, u8aToHex, u8aToString, hexToU8a, promisify, u8aToBuffer} from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import forge from 'node-forge';
+import axios from 'axios';
+
+import hash from 'js-sha256';
 
 let ERRORS = `
 InvalidSig,
@@ -41,10 +44,12 @@ ERRORS = _.map(ERRORS.split(','), (v)=>{
 
 
 export default class {
-  constructor(api, extension, env=null){
+  constructor(api, extension, env=null, opts){
     this.api = api;
     this.callback = {};
     this.extension = extension;
+
+    this.opts = opts || {};
 
     this.env = env || 'browser';
 
@@ -98,13 +103,14 @@ export default class {
   }
 
   sha256(data){
-    const tmp = forge.sha256.create();
-    tmp.update(data);
-    return tmp.digest().toHex();
+    // const tmp = forge.sha256.create();
+    // tmp.update(data);
+    // return tmp.digest().toHex();
+    return hash(data);
   }
 
   async promisify(fn){
-    await promisify(this, async (cb)=>{
+    return promisify(this, async (cb)=>{
       try{
         await fn(cb);
       }catch(e){
@@ -261,5 +267,98 @@ export default class {
     return delegates;
   }
 
-  
+  async browserGenerateAccount(account, key='btc', delegate_rsa){
+
+    await this.buildAccount(account);
+
+    const nonce = this.getRandomNonce();
+    const nonce_hash = hexToU8a('0x'+this.sha256(nonce));
+    
+
+    const mock_rsa = '0x24d614bd215f1c90345a4b505be6bd0589ac6b105a2a8c059a5890ba953aec11';
+    const rsa_hex = hexToU8a(mock_rsa); //delegate_rsa;
+
+    const key_type = stringToU8a(key);
+    const p1 = rsa_hex;
+    const p2_n = 3;
+    const p2_k = 2;
+
+    // console.log("key_type:", key_type)
+    // console.log("p2_n:", p2_n)
+    // console.log("p2_k:", p2_k)
+    // console.log("nonce_hash_u8:", nonce_hash)
+    // console.log("rsa_hex_u8:", rsa_hex)
+    // console.log("p1_u8:", p1)
+
+    return await this.promisify(async (cb)=>{
+      const rs = await axios({
+        url: this.opts.layer1_http,
+        method: 'post',
+        headers: {
+          "content-type": "application/json;charset=utf-8"
+        },
+        data: JSON.stringify({
+          jsonrpc: '2.0',
+          id: '112',
+          method: 'gluon_encodeAccountGenerationWithoutP3',
+          params: [
+            Array.from(key_type),
+            p2_n, 
+            p2_k, 
+            Array.from(nonce_hash),
+            Array.from(rsa_hex),
+            Array.from(p1)
+          ]
+        })
+      });
+      
+      const encoded_data = rs.data.result;
+      const encoded_hash = '0x'+this.sha256(encoded_data);
+
+      console.log('encoded_result_hash:', encoded_hash);
+
+      const me_nonce = this.getRandomNonce();
+      const me_nonce_hash = '0x'+this.sha256(me_nonce);
+      await this.api.tx.gluon.browserGenerateAccount(
+        me_nonce_hash,
+        encoded_hash,
+      ).signAndSend(account, (param)=>{
+        this._transactionCallback(param, (error)=>{
+          if(error){
+            cb(error);
+          }
+          else{
+            cb(null, {
+              nonce: me_nonce,
+              nonce_hash: u8aToHex(nonce_hash),
+              nonce_rsa: u8aToHex(rsa_hex),
+              key_type: key,
+              p1: u8aToHex(p1),
+              p2_n,
+              p2_k,
+            });
+          }
+        });
+      });
+    }); 
+  }
+
+  async appGenergateAccount(account, nonce, nonce_hash, nonce_rsa, key_type, p1, p2_n, p2_k, tar_address){
+    await this.buildAccount(account);
+
+    return this.promisify(async (cb)=>{
+      await this.api.tx.gluon.generateAccountWithoutP3(
+        nonce,
+        nonce_hash,
+        nonce_rsa,
+        key_type,
+        p1,
+        p2_n, 
+        p2_k,
+        u8aToHex(decodeAddress(tar_address)),
+      ).signAndSend(account, (param)=>{
+        this._transactionCallback(param, cb)
+      })
+    });
+  }
 }

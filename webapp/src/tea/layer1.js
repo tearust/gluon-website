@@ -10,6 +10,7 @@ import BN from 'bn.js';
 import utils from './utils';
 import gluon from './gluon';
 const LAYER1_URL = utils.get_env('layer1_url') || 'ws://127.0.0.1:9944';
+const LAYER1_HTTP = utils.get_env('layer1_http') || 'http://127.0.0.1:9933';
 
 class Layer1 {
   constructor(){
@@ -41,7 +42,9 @@ class Layer1 {
       this.handle_events(events)
     });
 
-    this.gluon = new gluon(this.api, this.extension, 'browser');
+    this.gluon = new gluon(this.api, this.extension, 'browser', {
+      layer1_http: LAYER1_HTTP
+    });
   }
 
   buildCallback(key, cb){

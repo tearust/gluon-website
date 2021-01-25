@@ -78,10 +78,13 @@ const types = {
   },
   RuntimeActivity: {
     teaId: 'TeaPubKey',
-    cid: 'Cid',
+    cid: 'Option<Cid>',
     ephemeralId: 'TeaPubKey',
     updateHeight: 'BlockNumber'
   },
+  //////////////
+  //  gluon   //
+  //////////////
   AccountAsset: {
     accountId: "Cid",
     btc: "Vec<Cid>",
@@ -100,31 +103,47 @@ const types = {
     delegatorNonceRsa: "Cid",
     p1: "Cid"
   },
-  KeyGenerationResult: {
-    taskId: "Cid",
-    p2: "Cid",
-    p2DeploymentIds: "Vec<Cid>",
-    multiSigAccount: "Cid"
-  },
   SignTransactionData: {
     dataAdhoc: "TxData",
     delegatorNonceHash: "Cid",
     delegatorNonceRsa: "Cid"
   },
+  SignTransactionTask: {
+    taskId: "Cid",
+    multisigAddress: "Cid",
+    p1Signature: "TxData",
+    taskData: "SignTransactionData"
+  },
   SignTransactionResult: {
     taskId: "Cid",
     succeed: 'bool'
   },
-  ransferAssetTask: {
+  TransferAssetTask: {
     from: "Cid",
     to: "Cid",
     startHeight: "BlockNumber"
   },
-  TransferAssetTask: {
-    from: "Cid",
-    to: "Cid",
-    "startHeight": "BlockNumber"
-  }
+  //////////////
+  // multiSig //
+  //////////////
+  Timepoint: {
+    /// The height of the chain at the point in time.
+    height: 'BlockNumber',
+    /// The index of the extrinsic at the point in time.
+    index: 'u32'
+  },
+  Multisig: {
+    /// The extrinsic when the multisig operation was opened.
+    when: 'Timepoint',
+    /// The amount held in reserve of the `depositor`, to be returned once the operation ends.
+    deposit: 'Balance',
+    /// The account who opened it (i.e. the first to approve it).
+    depositor: 'AccountId',
+    /// The approvals achieved so far, including the depositor. Always sorted.
+    approvals: 'Vec<AccountId>'
+  },
+  OpaqueCall: 'Vec<u8>',
+  Weight: 'u64'
 }
 
 module.exports = types
