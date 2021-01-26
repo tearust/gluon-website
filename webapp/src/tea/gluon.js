@@ -261,7 +261,10 @@ export default class {
 
   async getDelegatorList(startPosition=0){
     const neededDelegatesCount = 100;
-    const delegates = await this.api.rpc.gluon.getDelegates(startPosition, neededDelegatesCount);
+    const delegates = await this.api.rpc.tea.getDelegates(startPosition, neededDelegatesCount);
+    for (let i = 0; i < delegates.length; i++) {
+      console.log("pubkey:", delegates[i][0].toString(), "tea_id:", delegates[i][1].toString())
+    }
     console.log('gluon_getDelegates result:', delegates.toJSON())
 
     return delegates;

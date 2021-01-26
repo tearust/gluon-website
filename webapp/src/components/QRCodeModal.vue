@@ -4,6 +4,7 @@
   title="QR CODE"
   :visible.sync="visible"
   width="800"
+  :close-on-click-modal="false"
   custom-class="tea-modal"
   @opened="openedHandler"
   @close="closedHandler"
