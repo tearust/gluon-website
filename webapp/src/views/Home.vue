@@ -62,6 +62,9 @@ export default {
     async browserGenerateAccount(){
       try{
         const json = await this.wf.gluon.browserGenerateAccount(this.layer1_account.address, 'btc');
+
+        json.address = this.layer1_account.address;
+        json.type = 'account';
         this.wf.showQrCodeModal({
           text: JSON.stringify(json),
         });

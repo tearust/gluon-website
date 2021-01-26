@@ -77,7 +77,7 @@ export default class {
         const data = event.data;
         switch (event.method) {
           case 'RegistrationApplicationSucceed':
-            console.log('new pair found, app:', encodeAddress(data[0]), "broswer:", encodeAddress(data[1]));
+            console.log('new pair found, app:', encodeAddress(data[0]), "browser:", encodeAddress(data[1]));
             if(this.callback['RegistrationApplicationSucceed']){
               this.callback['RegistrationApplicationSucceed'](encodeAddress(data[0]), encodeAddress(data[1]));
             }
