@@ -49,7 +49,13 @@ new Vue({
       else{
         C._loading && C._loading.close();
       }
-    }
+    },
+    showError(e, title='Layer1 Error'){
+      const err = e.message || e.toString();
+      this.$alert(err, title, {
+        type: 'error'
+      });
+    },
   },
   render: h => h(App),
 }).$mount('#app');

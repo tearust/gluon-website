@@ -61,7 +61,11 @@ export default {
   methods: {
     async browserGenerateAccount(){
       try{
-        const json = await this.wf.gluon.browserGenerateAccount(this.layer1_account.address, 'btc');
+        const delegator = await this.wf.gluon.getSelectDelegator();
+        if(!delegator){
+          throw 'No delegator in layer1, please check.';
+        }
+        const json = await this.wf.gluon.browserGenerateAccount(this.layer1_account.address, 'btc', delegator.rsa);
 
         json.address = this.layer1_account.address;
         json.type = 'account';
@@ -69,7 +73,7 @@ export default {
           text: JSON.stringify(json),
         });
       }catch(e){
-        this.showError(e);
+        this.$root.showError(e);
       }
     },
   }
