@@ -93,6 +93,11 @@ export default class {
     return nonce;
   }
 
+  async getLayer1Nonce(address){
+    const nonce = await this.api.rpc.system.accountNextIndex(address);
+    return nonce;
+  }
+
   async buildAccount(account){
     if(_.isString(account)){
       return await this.extension.setSignerForAddress(account, this.api);
@@ -322,10 +327,13 @@ export default class {
 
       const me_nonce = this.getRandomNonce();
       const me_nonce_hash = '0x'+this.sha256(me_nonce);
+
+      const layer1_nonce = await this.getLayer1Nonce(account.toString());
+      console.log('layer1_nonce =>', layer1_nonce.toString())
       await this.api.tx.gluon.browserGenerateAccount(
         me_nonce_hash,
         encoded_hash,
-      ).signAndSend(account, (param)=>{
+      ).signAndSend(account, {nonce: layer1_nonce}, (param)=>{
         this._transactionCallback(param, (error)=>{
           if(error){
             cb(error);
