@@ -69,6 +69,8 @@ export default {
 
         json.address = this.layer1_account.address;
         json.type = 'account';
+
+        console.log(JSON.stringify(json));
         this.wf.showQrCodeModal({
           text: JSON.stringify(json),
         });

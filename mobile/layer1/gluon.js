@@ -77,7 +77,7 @@ export default class {
         const data = event.data;
         switch (event.method) {
           case 'RegistrationApplicationSucceed':
-            console.log('new pair found, app:', encodeAddress(data[0]), "broswer:", encodeAddress(data[1]));
+            console.log('new pair found, app:', encodeAddress(data[0]), "browser:", encodeAddress(data[1]));
             if(this.callback['RegistrationApplicationSucceed']){
               this.callback['RegistrationApplicationSucceed'](encodeAddress(data[0]), encodeAddress(data[1]));
             }
@@ -90,6 +90,11 @@ export default class {
   getRandomNonce(){
     let nonce = _.random(1, 100000000000).toString();
 
+    return nonce;
+  }
+
+  async getLayer1Nonce(address){
+    const nonce = await this.api.rpc.system.accountNextIndex(address);
     return nonce;
   }
 
@@ -259,12 +264,23 @@ export default class {
     return me;
   }
 
-  async getDelegatorList(startPosition=0){
+  async getSelectDelegator(startPosition=0){
     const neededDelegatesCount = 100;
-    const delegates = await this.api.rpc.gluon.getDelegates(startPosition, neededDelegatesCount);
-    console.log('gluon_getDelegates result:', delegates.toJSON())
-
-    return delegates;
+    const delegates = await this.api.rpc.tea.getDelegates(startPosition, neededDelegatesCount);
+    if(!delegates || delegates.length < 1){
+      return null;
+    }
+    // for (let i = 0; i < delegates.length; i++) {
+    //   console.log("pubkey:", delegates[i][0].toString(), "tea_id:", delegates[i][1].toString())
+    // }
+    // console.log('gluon_getDelegates result:', delegates.toJSON())
+    const random = _.random(0, delegates.length-1);
+    const rs = {
+      rsa: delegates[random][0].toString(),
+      teaId: delegates[random][1].toString(),
+    }
+    console.log('Get delegator =>', rs);
+    return rs;
   }
 
   async browserGenerateAccount(account, key='btc', delegate_rsa){
@@ -275,8 +291,8 @@ export default class {
     const nonce_hash = hexToU8a('0x'+this.sha256(nonce));
     
 
-    const mock_rsa = '0x24d614bd215f1c90345a4b505be6bd0589ac6b105a2a8c059a5890ba953aec11';
-    const rsa_hex = hexToU8a(mock_rsa); //delegate_rsa;
+    // const mock_rsa = '0x24d614bd215f1c90345a4b505be6bd0589ac6b105a2a8c059a5890ba953aec11';
+    const rsa_hex = hexToU8a(delegate_rsa);
 
     const key_type = stringToU8a(key);
     const p1 = rsa_hex;
@@ -319,10 +335,13 @@ export default class {
 
       const me_nonce = this.getRandomNonce();
       const me_nonce_hash = '0x'+this.sha256(me_nonce);
+
+      const layer1_nonce = await this.getLayer1Nonce(account.toString());
+      console.log('layer1_nonce =>', layer1_nonce.toString())
       await this.api.tx.gluon.browserGenerateAccount(
         me_nonce_hash,
         encoded_hash,
-      ).signAndSend(account, (param)=>{
+      ).signAndSend(account, {nonce: layer1_nonce}, (param)=>{
         this._transactionCallback(param, (error)=>{
           if(error){
             cb(error);

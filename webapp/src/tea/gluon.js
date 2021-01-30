@@ -268,6 +268,7 @@ export default class {
     const neededDelegatesCount = 100;
     const delegates = await this.api.rpc.tea.getDelegates(startPosition, neededDelegatesCount);
     if(!delegates || delegates.length < 1){
+      console.log('Get delegator =>', null);
       return null;
     }
     // for (let i = 0; i < delegates.length; i++) {
