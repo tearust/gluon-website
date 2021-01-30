@@ -264,15 +264,23 @@ export default class {
     return me;
   }
 
-  async getDelegatorList(startPosition=0){
+  async getSelectDelegator(startPosition=0){
     const neededDelegatesCount = 100;
     const delegates = await this.api.rpc.tea.getDelegates(startPosition, neededDelegatesCount);
-    for (let i = 0; i < delegates.length; i++) {
-      console.log("pubkey:", delegates[i][0].toString(), "tea_id:", delegates[i][1].toString())
+    if(!delegates || delegates.length < 1){
+      return null;
     }
-    console.log('gluon_getDelegates result:', delegates.toJSON())
-
-    return delegates;
+    // for (let i = 0; i < delegates.length; i++) {
+    //   console.log("pubkey:", delegates[i][0].toString(), "tea_id:", delegates[i][1].toString())
+    // }
+    // console.log('gluon_getDelegates result:', delegates.toJSON())
+    const random = _.random(0, delegates.length-1);
+    const rs = {
+      rsa: delegates[random][0].toString(),
+      teaId: delegates[random][1].toString(),
+    }
+    console.log('Get delegator =>', rs);
+    return rs;
   }
 
   async browserGenerateAccount(account, key='btc', delegate_rsa){
@@ -283,8 +291,8 @@ export default class {
     const nonce_hash = hexToU8a('0x'+this.sha256(nonce));
     
 
-    const mock_rsa = '0x24d614bd215f1c90345a4b505be6bd0589ac6b105a2a8c059a5890ba953aec11';
-    const rsa_hex = hexToU8a(mock_rsa); //delegate_rsa;
+    // const mock_rsa = '0x24d614bd215f1c90345a4b505be6bd0589ac6b105a2a8c059a5890ba953aec11';
+    const rsa_hex = hexToU8a(delegate_rsa);
 
     const key_type = stringToU8a(key);
     const p1 = rsa_hex;

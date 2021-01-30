@@ -37,6 +37,8 @@ export default {
       nonce: null,
 
       generate_account: null,
+
+      delegator: null,
     };
   },
 
@@ -122,7 +124,8 @@ export default {
     async getDelegatorList(){
       try{
         
-        const list = await this.test.gluon.getDelegatorList();
+        const delegator = await this.test.gluon.getSelectDelegator();
+        this.delegator = delegator;
 
       }catch(e){
         this.showError(e);
@@ -131,7 +134,9 @@ export default {
 
     async browserGenerateAccount(){
       try{
-        const d = await this.test.gluon.browserGenerateAccount(this.layer1_account.address, 'btc');
+        if(!this.delegator) throw 'Invalid delegator';
+
+        const d = await this.test.gluon.browserGenerateAccount(this.layer1_account.address, 'btc', this.delegator.rsa);
         this.generate_account = d;
       }catch(e){
         this.showError(e);
