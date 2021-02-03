@@ -13,6 +13,8 @@ import Layout from '../../constants/Layout';
 
 import Layer1 from '../../layer1';
 
+const mock_data = '{"nonce":"96093182429","nonce_hash":"0x509324735addf08dbbccb0817e778bb95962109b39931a5ed7309509f1bff080","nonce_rsa":"0x3082010a0282010100a7f52286218561462a159dcd5c28f0580c3674b99b6a3a","key_type":"btc","p1":"0x3082010a0282010100a7f52286218561462a159dcd5c28f0580c3674b99b6a3a","p2_n":3,"p2_k":2,"address":"5FnjDG3j9uVCXuyCd2UgzwHUyT7CpgbR6HquvPdas4ttvErM","type":"account"}';
+
 
 export default class extends Base {
   _defineState(){

@@ -18,13 +18,7 @@ const store = new Vuex.Store({
     // uuid: '29308409284023805283502845038453095803485308503',
     bind_mobile: null,
 
-    btc_list: [
-      // {
-      //   address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-      //   balance: 0.01,
-      //   pub: 'public_key',
-      // }
-    ],
+    btc_list: [],
   },
 
   getters: {
@@ -62,6 +56,17 @@ const store = new Vuex.Store({
           uuid: opts.uuid,
         };
       }
+    },
+
+    add_btc_account_mock(state, opts){
+      const list = state.btc_list;
+      list.push({
+        address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+        balance: 0.01,
+        pub: 'public_key',
+        status: 'normal',
+      });
+      state.btc_list = list;
     }
   }
 })

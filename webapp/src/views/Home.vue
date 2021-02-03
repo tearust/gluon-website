@@ -13,6 +13,10 @@
         <b>BALANCE</b>
         <span>{{item.balance}}</span>
       </div>
+      <div class="x-item">
+        <b>STATUS</b>
+        <span :class="'x-status '+item.status"></span>
+      </div>
 
     </div>
 
@@ -26,7 +30,7 @@
   <el-divider v-if="btc_list.length>0" />
   
   <div class="tea-card flex-center gray">
-    <el-button class="x-only-btn" icon="el-icon-plus" @click="browserGenerateAccount()">ADD BTC</el-button>
+    <el-button class="x-only-btn" icon="el-icon-plus" @click="browserGenerateAccount_mock()">ADD BTC</el-button>
   </div>
 
 </div>
@@ -78,6 +82,12 @@ export default {
         this.$root.showError(e);
       }
     },
+    async browserGenerateAccount_mock(){
+      this.$store.commit('add_btc_account_mock');
+    }
   }
 }
 </script>
+<style lang="scss">
+
+</style>

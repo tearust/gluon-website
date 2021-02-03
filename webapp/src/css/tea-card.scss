@@ -40,6 +40,24 @@
     font-size: 18px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    .x-status{
+      display: block;
+      width: 12px;
+      height: 12px;
+      border-radius: 6px;
+      
+      &.normal{
+        background-color: green;
+      }
+      &.block{
+        background-color: red;
+      }
+      &.recovery{
+        background-color: yellow;
+      }
+    }
   }
 
   .x-right{
