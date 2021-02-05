@@ -268,23 +268,24 @@ export default class {
     const neededDelegatesCount = 100;
     const delegates = await this.api.rpc.tea.getDelegates(startPosition, neededDelegatesCount);
     if(!delegates || delegates.length < 1){
-      console.log('Get delegator =>', null);
+      console.log('Not found delegator');
       return null;
     }
     // for (let i = 0; i < delegates.length; i++) {
-    //   console.log("pubkey:", delegates[i][0].toString(), "tea_id:", delegates[i][1].toString())
+    //   console.log("pubkey:", delegates[i][0].toString(), "tea_id:", delegates[i][1].toString(), "peer_id:", delegates[i][2].toString())
     // }
-    // console.log('gluon_getDelegates result:', delegates.toJSON())
+    console.log('gluon_getDelegates result:', delegates.toJSON())
     const random = _.random(0, delegates.length-1);
     const rs = {
       rsa: delegates[random][0].toString(),
       teaId: delegates[random][1].toString(),
+      peerId: delegates[random][2].toString(),
     }
     console.log('Get delegator =>', rs);
     return rs;
   }
 
-  async browserGenerateAccount(account, key='btc', delegate_rsa){
+  async browserGenerateAccount(account, key, delegate_rsa){
 
     await this.buildAccount(account);
 

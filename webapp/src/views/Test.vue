@@ -136,7 +136,7 @@ export default {
       try{
         if(!this.delegator) throw 'Invalid delegator';
 
-        const d = await this.test.gluon.browserGenerateAccount(this.layer1_account.address, 'btc', this.delegator.rsa);
+        const d = await this.test.gluon.browserGenerateAccount(this.layer1_account.address, 'bitcoin_mainnet', this.delegator.rsa);
         this.generate_account = d;
       }catch(e){
         this.showError(e);
