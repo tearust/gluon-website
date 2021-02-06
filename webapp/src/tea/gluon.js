@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { stringToHex, stringToU8a, u8aToHex, u8aToString, hexToU8a, promisify, u8aToBuffer} from '@polkadot/util';
+import { stringToHex, stringToU8a, u8aToHex, u8aToString, hexToU8a, promisify, u8aToBuffer, hexToString} from '@polkadot/util';
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import forge from 'node-forge';
 import axios from 'axios';
@@ -214,6 +214,16 @@ export default class {
     return null;
   }
 
+  rsaEncodeWithRsaPublickKey(data, ras_pub_hex){
+    let tmp = ras_pub_hex;
+    console.log(333, tmp);
+    const pub = forge.pki.publicKeyFromPem(tmp);
+    let rs = pub.encrypt(data);
+
+    console.log(22, forge.util.bytesToHex(rs));
+    return forge.util.bytesToHex(rs);
+  }
+
   async _getAccountProfile(address){
     // const empty_address = '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM';
     const empty_hex = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -275,7 +285,8 @@ export default class {
     //   console.log("pubkey:", delegates[i][0].toString(), "tea_id:", delegates[i][1].toString(), "peer_id:", delegates[i][2].toString())
     // }
     console.log('gluon_getDelegates result:', delegates.toJSON())
-    const random = _.random(0, delegates.length-1);
+    // const random = _.random(0, delegates.length-1);
+    const random = delegates.length-1;
     const rs = {
       rsa: delegates[random][0].toString(),
       teaId: delegates[random][1].toString(),
@@ -292,9 +303,9 @@ export default class {
     const nonce = this.getRandomNonce();
     const nonce_hash = hexToU8a('0x'+this.sha256(nonce));
     
-
-    // const mock_rsa = '0x24d614bd215f1c90345a4b505be6bd0589ac6b105a2a8c059a5890ba953aec11';
-    const rsa_hex = hexToU8a(delegate_rsa);
+    const pem = forge.util.hexToBytes(delegate_rsa);
+    const x = this.rsaEncodeWithRsaPublickKey(nonce, pem);
+    const rsa_hex = hexToU8a('0x'+x);
 
     const key_type = stringToU8a(key);
     const p1 = rsa_hex;
