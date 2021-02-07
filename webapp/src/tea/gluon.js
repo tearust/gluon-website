@@ -393,4 +393,43 @@ export default class {
       })
     });
   }
+
+  // async getAssets(){
+    // const assets = await this.api.query.gluon.assets.entries();
+    // console.log(assets.toString())
+
+  //   const multiAssetInfos = []
+  //   assets.forEach((asset, i) => {
+  //     const p2DeploymentIds = []
+  //     asset[1].deploymentIds.forEach((id, i) => {
+  //       p2DeploymentIds.push(id.toString().slice(2))
+  //     })
+  //     const AssetInfo = {
+  //       sender: u8aToHex(asset[1].owner).slice(2),
+  //       p2: u8aToHex(asset[1].p2).slice(2),
+  //       p2DeploymentIds: p2DeploymentIds,
+  //     }
+  //     console.log()
+  //     const multiAssetInfo = {
+  //       multiSigAccount: Buffer.from(asset[1].multiSigAccount, 'hex'),
+  //       assetInfo: AssetInfo
+  //     }
+  //     multiAssetInfos.push(multiAssetInfo)
+  //   })
+
+  //   const getAssetsResponse = {
+  //     assets: multiAssetInfos
+  //   }
+
+  //   console.log('newGetAssetsResponse:', JSON.stringify(getAssetsResponse))
+  // }
+  async getAssets(address){
+    const pub = decodeAddress(address);
+
+    const assets = await this.api.query.gluon.assets.entries();
+    console.log(assets.toString())
+
+    const multi_sig_accounts = await this.api.query.gluon.browserMultiSigAccounts(pub);
+    console.log(multi_sig_accounts.toString());
+  }
 }

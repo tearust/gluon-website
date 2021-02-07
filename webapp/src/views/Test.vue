@@ -23,6 +23,10 @@
     <el-button type="primary" @click="appGenerateAccount()">APP GENERATE ACCOUNT</el-button>
   </div>
   <el-divider />
+  <h4>LAYER1 - ASSETS</h4>
+  <div class="t-box">
+    <el-button type="primary" @click="getAssets()">GET ASSETS</el-button>
+  </div>
 
 
 </div>
@@ -161,6 +165,9 @@ export default {
       }
     },
     
+    async getAssets(){
+      const d = await this.test.gluon.getAssets(this.layer1_account.address);
+    },
 
 
     showError(e){
