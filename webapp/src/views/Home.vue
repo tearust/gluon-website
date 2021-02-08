@@ -6,8 +6,12 @@
 
     <div class="x-list">
       <div class="x-item">
+        <b>TYPE</b>
+        <span>{{item.type}}</span>
+      </div>
+      <div class="x-item">
         <b>ADDRESS</b>
-        <span>{{item.address}}</span>
+        <span>{{item.account}}</span>
       </div>
       <div class="x-item">
         <b>BALANCE</b>
@@ -30,7 +34,7 @@
   <el-divider v-if="btc_list.length>0" />
   
   <div class="tea-card flex-center gray">
-    <el-button class="x-only-btn" icon="el-icon-plus" @click="browserGenerateAccount_mock()">ADD BTC</el-button>
+    <el-button class="x-only-btn" icon="el-icon-plus" @click="browserGenerateAccount()">ADD BTC</el-button>
   </div>
 
 </div>
@@ -39,6 +43,7 @@
 import {mapState, mapGetters} from 'vuex';
 import Base from '../workflow/Base';
 import _ from 'lodash';
+
 export default {
   data() {
     return {
@@ -59,6 +64,7 @@ export default {
     this.wf = new Base();
     await this.wf.init();
 
+    this.refreshAsset();
     this.$root.loading(false);
 
   },
@@ -69,14 +75,15 @@ export default {
         if(!delegator){
           throw 'No delegator in layer1, please check.';
         }
-        const json = await this.wf.gluon.browserGenerateAccount(this.layer1_account.address, 'btc', delegator.rsa);
+        const json = await this.wf.gluon.browserGenerateAccount(this.layer1_account.address, 'bitcoin_mainnet', delegator.rsa);
 
         json.address = this.layer1_account.address;
         json.type = 'account';
 
-        console.log(JSON.stringify(json));
+        const text = (JSON.stringify(json));
+        console.log(text);
         this.wf.showQrCodeModal({
-          text: JSON.stringify(json),
+          text: text,
         });
       }catch(e){
         this.$root.showError(e);
@@ -84,6 +91,10 @@ export default {
     },
     async browserGenerateAccount_mock(){
       this.$store.commit('add_btc_account_mock');
+    },
+
+    refreshAsset(){
+      this.$store.dispatch('set_asset');
     }
   }
 }

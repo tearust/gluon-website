@@ -34,7 +34,7 @@
 <script>
 import Test from '../workflow/Test';
 import _ from 'lodash';
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex';
 export default {
   data(){
     return {
@@ -166,7 +166,8 @@ export default {
     },
     
     async getAssets(){
-      const d = await this.test.gluon.getAssets(this.layer1_account.address);
+      const d = await this.test.gluon.getAssetsByAddress(this.layer1_account.address);
+      console.log(11, d);
     },
 
 

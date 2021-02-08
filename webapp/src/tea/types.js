@@ -83,11 +83,6 @@ const types = {
     ephemeralId: 'TeaPubKey',
     updateHeight: 'BlockNumber'
   },
-  Asset: {
-    owner: 'AccountId',
-    p2: 'Cid',
-    deploymentIds: 'Vec<Cid>',
-  },
   //////////////
   //  gluon   //
   //////////////
@@ -96,7 +91,15 @@ const types = {
     btc: "Vec<Cid>",
     eth: "Vec<Cid>"
  },
-
+  Asset: {
+    owner: 'AccountId',
+    p2: 'Cid',
+    deploymentIds: 'Vec<Cid>',
+    web: "AccountId",
+    app: "AccountId",
+    multiSigAccount: "MultiSigAccount",
+    dataAdhoc: "AccountGenerationDataWithoutP3"
+  },
   AccountGenerationDataWithoutP3: {
     keyType: "Cid",
     n: "u32",

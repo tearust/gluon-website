@@ -7,6 +7,7 @@ import http from '../tea/http';
 import toHex from 'to-hex';
 import BN from 'bn.js';
 import store from '../store';
+import forge from 'node-forge';
 
 
 
@@ -53,6 +54,10 @@ export default class {
     utils.publish('tea-qrcode-modal', {
       visible: false,
     });
+  }
+
+  encode_b64(str){
+    return forge.util.encode64(str);
   }
 
   showSelectLayer1Modal(){

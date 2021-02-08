@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import _ from 'lodash';
 
+import Base from '../workflow/Base';
 
 Vue.use(Vuex)
 
@@ -58,15 +59,44 @@ const store = new Vuex.Store({
       }
     },
 
-    add_btc_account_mock(state, opts){
-      const list = state.btc_list;
-      list.push({
-        address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-        balance: 0.01,
-        pub: 'public_key',
-        status: 'normal',
+    // add_btc_account_mock(state, opts){
+    //   const list = state.btc_list;
+    //   list.push({
+    //     address: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+    //     balance: 0.01,
+    //     pub: 'public_key',
+    //     status: 'normal',
+    //     profile: {},
+    //   });
+    //   state.btc_list = list;
+    // },
+
+    set_all_asset(state, asset){
+      const list = _.map(asset, (item)=>{
+        item.balance = 0;
+        item.status = 'normal';
+        return item;
       });
+
       state.btc_list = list;
+    },
+  },
+
+  actions: {
+    async set_asset(store){
+      const layer1_account = store.getters.layer1_account;
+      if(!layer1_account){
+        throw 'Invalid layer1 account';
+      }
+
+      const address = layer1_account.address;
+      this.wf = new Base();
+      await this.wf.init();
+
+      const asset = await this.wf.gluon.getAssetsByAddress(address);
+      
+      store.commit('set_all_asset', asset);
+
     }
   }
 })
