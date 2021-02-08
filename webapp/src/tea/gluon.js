@@ -308,9 +308,9 @@ export default class {
     const rsa_hex = hexToU8a('0x'+x);
 
     const key_type = stringToU8a(key);
-    const p1 = rsa_hex;
-    const p2_n = 3;
-    const p2_k = 2;
+    const p1 = '0x02ef26ecbd873ee5a71c7e16a34ef540c17a81cf7530e418ea9f6165092dc2541a';
+    const p2_n = 2;
+    const p2_k = 1;
 
     // console.log("key_type:", key_type)
     // console.log("p2_n:", p2_n)
