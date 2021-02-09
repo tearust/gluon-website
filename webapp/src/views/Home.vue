@@ -80,7 +80,8 @@ export default {
         json.address = this.layer1_account.address;
         json.type = 'account';
 
-        const text = (JSON.stringify(json));
+        const tmp = this.wf.gluon.zipJsonSize(json);
+        const text = JSON.stringify(tmp);
         console.log(text);
         this.wf.showQrCodeModal({
           text: text,

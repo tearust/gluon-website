@@ -6,6 +6,7 @@ import types from './types';
 import Pubsub from 'pubsub-js';
 
 import forge from 'node-forge';
+import * as polk_util from '@polkadot/util';
 
 const bootstrapNodesList = ()=>{
   return {
@@ -142,6 +143,7 @@ const F = {
   crypto,
   proto,
   forge,
+  polk_util,
 
   getHttpBaseUrl() {
     if(!_http_base_url){

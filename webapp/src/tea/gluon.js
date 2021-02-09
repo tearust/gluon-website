@@ -262,6 +262,23 @@ export default class {
     return profile;
   }
 
+  zipJsonSize(json){
+    // json = {"nonce":"87969575696","nonce_hash":"0x1ee56f4d98c256489d050821ec6c4a30fb54e8f912d9117c3b8bfd8d4c05b31b","nonce_rsa":"0x8bb547a970e0b69ea62d1807d8189d3fa9c5c799ae1bce571acb095a20d303bebbf76faf0fb8bce43b5d8055c73a9b3761626018935f6a12723de4e7d91c0820cd8936471c9576c0d65aec6b8e24b256262f9428f9a97e2b9248e1c75af1b548dfdb93e4e87bf48c1fda5892d9d8fdf139f70c4f5e1ce3837b145f074f4b105242a8878d0a0c11a7d44340d3c299ce03a7febd798c3048265b1e29bee6aae57bcda85f8e844366b23c453e4898f7d405c041d5960e196b6561ee57545305be35942bd4f4db874e0d302ba8d04c5412ffaffda4c4cabb67a7f2ff9c035283c957f3d15dbb5081c4e1d1aac921f44f9f2907891fd79ee0410ed936a7b2f1c911f6","key_type":"bitcoin_mainnet","p1":"0x02ef26ecbd873ee5a71c7e16a34ef540c17a81cf7530e418ea9f6165092dc2541a","p2_n":2,"p2_k":1,"address":"5FnjDG3j9uVCXuyCd2UgzwHUyT7CpgbR6HquvPdas4ttvErM","type":"account"};
+
+
+    const rs = {};
+    _.each(json, (val, key)=>{
+      if(_.startsWith(val, '0x')){
+        rs[key] = forge.util.binary.base64.encode(hexToU8a(val));
+      }
+      else{
+        rs[key] = val;
+      }
+    });
+
+    return rs;
+  }
+
   async getAccountProfile(address){
     const me = await this._getAccountProfile(address);
     if(!me.pair_address){

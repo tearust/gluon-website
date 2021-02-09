@@ -5,7 +5,7 @@
   <div class="t-box">
     <el-button type="primary" @click="showQrCode()">SHOW QR CODE</el-button>
     <el-button type="primary" @click="showSelectLayer1()">SELECT LAYER1</el-button>
-    <!-- <el-button type="primary" @click="getTeaNodes()">GET TEA NODES</el-button> -->
+    <!-- <el-button type="primary" @click="zipJsonSize()">ZIP JSON</el-button> -->
   </div>
   <el-divider />
 
@@ -168,6 +168,11 @@ export default {
     async getAssets(){
       const d = await this.test.gluon.getAssetsByAddress(this.layer1_account.address);
       console.log(11, d);
+    },
+
+    zipJsonSize(){
+      const rs = this.test.gluon.zipJsonSize();
+      console.log(JSON.stringify(rs));
     },
 
 
