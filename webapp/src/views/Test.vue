@@ -29,6 +29,12 @@
   </div>
 
 
+
+  <div class="x-log" v-if="latest_meta">
+    <p v-for="(val, key) in latest_meta" :key="key">
+      {{key}} => <span style="color:#0ff; word-break: break-all;">{{val}}</span>
+    </p>
+  </div>
 </div>
 </template>
 <script>
@@ -51,8 +57,9 @@ export default {
       'layer1_account'
     ]),
     ...mapState([
-      'bind_mobile'
-    ])
+      'bind_mobile',
+      'latest_meta',
+    ]),
   },
 
   async mounted(){
@@ -142,6 +149,11 @@ export default {
 
         const d = await this.test.gluon.browserGenerateAccount(this.layer1_account.address, 'bitcoin_mainnet', this.delegator.rsa);
         this.generate_account = d;
+        this.$store.commit('set_meta', {
+          delegator_nonce: d.nonce,
+          delegator_nonce_hash: d.nonce_hash,
+          delegator_nonce_rsa: d.nonce_rsa,
+        });
       }catch(e){
         this.showError(e);
       }
@@ -190,5 +202,20 @@ export default {
 .t-box{
   display: flex;
   flex-direction: 'row';
+}
+.x-log{
+  position: absolute;
+  top: 80px;
+  right: 0;
+  width: 400px;
+  background: #000;
+  min-height: 200px;
+  padding: 12px 15px;
+  color: lime;
+  
+  p{
+    margin: 0;
+    margin-bottom: 8px;
+  }
 }
 </style>

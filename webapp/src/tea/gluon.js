@@ -329,8 +329,8 @@ export default class {
 
     const key_type = stringToU8a(key);
     const p1 = hexToU8a('0x02ef26ecbd873ee5a71c7e16a34ef540c17a81cf7530e418ea9f6165092dc2541a');
-    const p2_n = 2;
-    const p2_k = 1;
+    const p2_n = 3;
+    const p2_k = 2;
 
     // console.log("key_type:", key_type)
     // console.log("p2_n:", p2_n)
@@ -434,5 +434,9 @@ export default class {
 
     console.log('Get Assets =>', rs);
     return rs;
+  }
+
+  async browserSignTx(){
+
   }
 }

@@ -20,6 +20,13 @@ const store = new Vuex.Store({
     bind_mobile: null,
 
     btc_list: [],
+
+    latest_meta: {
+      delegator_nonce: null,
+      delegator_nonce_hash: null,
+      delegator_nonce_rsa: null,
+
+    },
   },
 
   getters: {
@@ -80,6 +87,10 @@ const store = new Vuex.Store({
 
       state.btc_list = list;
     },
+
+    set_meta(state, opts){
+      state.latest_meta = _.extend(state.latest_meta, opts);
+    }
   },
 
   actions: {
