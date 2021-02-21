@@ -2,10 +2,10 @@ version: "3.1"
 services:
 
   backend:
-    image: tearust/gluon-website-backend:0.1
+    image: tearust/gluon-website-backend:0.2
     container_name: backend
     ports:
-      - 3001:3001
+      - 3001:3002
     volumes: 
       - ../gluon-docs:/tea-docs
     environment: 
@@ -14,11 +14,11 @@ services:
     command: "node index.js"
     
   frontend:
-    image: tearust/gluon-website-frontend:0.1
+    image: tearust/gluon-website-frontend:0.2
     container_name: frontend
     # volumes:
       # - /letsencrypt:/etc/letsencrypt
     ports:
-      - 80:80
+      - 80:81
         
     
