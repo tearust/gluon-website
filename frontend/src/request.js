@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import util from './util';
 
-const SERVER_URL = `http://${location.hostname}:3001`
+const SERVER_URL = `http://${location.hostname}:3002`
 const BASE_URL = `${SERVER_URL}/api`;
 // const BASE_URL = 'http://81.70.96.136:3001/api';
 
