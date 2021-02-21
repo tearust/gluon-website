@@ -5,7 +5,7 @@ services:
     image: tearust/gluon-website-backend:0.2
     container_name: gluon-backend
     ports:
-      - 3001:3002
+      - 3002:3001
     volumes: 
       - ../gluon-docs:/tea-docs
     environment: 
@@ -19,6 +19,6 @@ services:
     # volumes:
       # - /letsencrypt:/etc/letsencrypt
     ports:
-      - 80:81
+      - 81:80
         
     
