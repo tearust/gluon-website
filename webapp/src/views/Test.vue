@@ -28,6 +28,13 @@
     <el-button type="primary" @click="getAssets()">GET ASSETS</el-button>
   </div>
 
+  <el-divider />
+  <h4>LAYER1 - TRANSACTION</h4>
+  <div class="t-box">
+    <el-button type="primary" @click="browserSignTx()">BROWSER SIGN TRANSACTION</el-button>
+    <el-button type="primary" @click="appSignTx()">APP CONFIRM TRANSACTION</el-button>
+    
+  </div>
 
 
   <div class="x-log" v-if="latest_meta">
@@ -187,6 +194,28 @@ export default {
       console.log(JSON.stringify(rs));
     },
 
+    async browserSignTx(){
+      if(!this.latest_meta){
+        alert('invalid meta');
+        return false;
+      }
+
+      try{
+        const {delegator_nonce_hash, delegator_nonce_rsa} = this.latest_meta; 
+        const d = await this.test.gluon.browserSignTx(
+          this.layer1_account.address, 
+          '', 
+          delegator_nonce_hash, 
+          delegator_nonce_rsa
+        );
+
+        console.log(111, d);
+
+      }catch(e){
+        this.showError(e);
+      }
+    },
+
 
     showError(e){
       const err = e.message || e.toString();
@@ -204,7 +233,7 @@ export default {
   flex-direction: 'row';
 }
 .x-log{
-  position: absolute;
+  position: fixed;
   top: 80px;
   right: 0;
   width: 400px;

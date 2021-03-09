@@ -182,6 +182,7 @@ export default class {
       console.log('Included at block hash', status.asInBlock.toHex());
       console.log('Events:');
 
+      const opts = {};
       events.forEach(({ event: { data, method, section }, phase }) => {
         console.log('\t', phase.toString(), `: ${section}.${method}`, data.toString())
         if(method === 'ExtrinsicFailed'){
@@ -190,12 +191,12 @@ export default class {
             cb(error);
             return;
           }
-          console.log(11, data.toString())
+          opts.data = data;
         }
         
       })
 
-      cb(null, true);
+      cb(null, true, opts);
     } else if (status.isFinalized) {
       console.log('Finalized block hash', status.asFinalized.toHex())
     }
@@ -436,7 +437,24 @@ export default class {
     return rs;
   }
 
-  async browserSignTx(){
+  async browserSignTx(account, data, nonce_hash, nonce_rsa){
+    await this.buildAccount(account);
+    const data_adhoc = u8aToHex(stringToU8a('transactionData'));
 
+    return this.promisify(async (cb)=>{
+      await this.api.tx.gluon.browserSignTx(data_adhoc, nonce_hash, nonce_rsa)
+      .signAndSend(account, (param)=>{
+        this._transactionCallback(param, (error, f, opts)=>{
+          if(error){
+            cb(error);
+          }
+          else{
+            const data = opts.data;
+            console.log(11, data);
+          }
+        });
+
+      });
+    });
   }
 }
