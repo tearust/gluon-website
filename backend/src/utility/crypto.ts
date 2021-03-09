@@ -3,7 +3,7 @@ import * as aes from 'crypto-js/aes';
 import * as utf8 from 'crypto-js/enc-utf8'
 import * as forge from 'node-forge';
 
-const secret = 'accenture';
+const secret = process.env.APP_SECRET || 'gluon';
 
 export default {
   sha(str: string){

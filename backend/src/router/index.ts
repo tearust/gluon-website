@@ -7,7 +7,9 @@ import ping from './ping';
 import user from './user';
 import tea from './tea';
 import doc from './doc';
+import admin from './admin';
 
+import db from '../db';
 
 
 /**
@@ -24,12 +26,17 @@ export const middleware = async (req: Request, res: Response, next: NextFunction
   // console.log(token);
   req['session'] = {} as any;
   if(token){
-    // const uid = crypto.decrypt(token);
-    // const user = _.find(UserData, (item)=>item.id === uid);
 
-    // if(user){
-    //   req['session'].user = user;
-    // }
+    const DB = await db.create();
+    const _db = DB.getModel('AdminUser');
+    const one = await _db.findOne({token: token});
+    if(one){
+      req['session'].user = {
+        username: one.username,
+        
+      };
+    }
+ 
   }
   next();
 }
@@ -43,6 +50,7 @@ router.use('/ping', Base.setRouter([{
 router.use('/user', user);
 router.use('/tea', tea);
 router.use('/doc', doc);
+router.use('/admin', admin);
 
 
 router.use((req, res) => {

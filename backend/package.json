@@ -30,6 +30,7 @@
     "js-yaml": "^3.14.0",
     "lodash": "^4.17.20",
     "moment": "^2.22.1",
+    "mongoose": "^5.11.19",
     "morgan": "1.10.0",
     "newrelic": "6.13.1",
     "node-forge": "^0.10.0",

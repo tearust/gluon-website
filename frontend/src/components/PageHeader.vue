@@ -16,7 +16,7 @@
   <!-- <el-menu-item @click="changeLang()">{{$t('nav.001')}}</el-menu-item> -->
   <el-menu-item style="display:none;" index="1">{{$t('nav.test')}}</el-menu-item>
   
-  <!-- <el-menu-item index="/doc_list/Try_the_demo%2FREADME.md">{{$t('nav.002')}}</el-menu-item> -->
+  <el-menu-item index="/presale">{{'Pre sale'}}</el-menu-item>
   <el-menu-item index="/doc_list">{{$t('nav.003')}}</el-menu-item>
   <el-menu-item index="/white_paper">{{$t('nav.005')}}</el-menu-item>
 
@@ -110,7 +110,7 @@
 .p-header{
   padding: 10px 0 0 0;
   max-width:1140px;
-  margin: 0 auto;
+  margin: 0 auto !important;
 
   .el-image{
     width: 60px; 
@@ -132,15 +132,15 @@
   
 }
 .el-menu--horizontal > .el-menu-item{
-  float: right;
+  float: right !important;
   
 }
 .el-menu--horizontal > .el-submenu{
-  float: right;
+  float: right !important;
   
 }
 .el-menu.el-menu--horizontal{
-  border-bottom: none;
+  border-bottom: none !important;
 }
 
 @media screen and (max-width : 600px) {

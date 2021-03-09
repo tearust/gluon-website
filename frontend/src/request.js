@@ -50,6 +50,19 @@ const F = {
   },
   get_layer1_info(){
     return _axios.get('/tea/layer1_info');
+  },
+
+  async admin_login(username, password){
+    const token = await _axios.post('/admin/login', {
+      username, password
+    });
+
+    util.setCookie('token', token);
+    return token;
+  },
+
+  admin_check_login(){
+    return _axios.get('/admin/check_login');
   }
   
 };

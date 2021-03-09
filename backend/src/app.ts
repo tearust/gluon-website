@@ -11,12 +11,15 @@ import * as fs from 'fs';
 import * as cookieParser from 'cookie-parser';
 import * as path from 'path';
 
+import db from './db';
+
 import router, {middleware} from './router';
 
 import {DOC_DIR} from './config';
 
 
 (async ()=>{
+    const DB = await db.create();
     const app = express();
     const prefix = '/api';
 

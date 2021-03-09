@@ -1,5 +1,5 @@
 import Base from '../Base';
-import UserService from '../../service/UserService';
+import AdminUserService from '../../service/AdminUserService';
 
 /**
  * check login status
@@ -8,9 +8,9 @@ import UserService from '../../service/UserService';
 export default class extends Base {
 
   async action(){
-    const us = this.buildService(UserService);
+    const us = this.buildService(AdminUserService);
     const user = us.currentUser;
-    
+
     if(user){
       return this.result(1, user);
     }

@@ -3,6 +3,7 @@ import * as Session from 'express-session';
 import Service from '../service/Base';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import DB from '../db';
 
 interface RESULT {
   code: number
@@ -34,6 +35,7 @@ export default abstract class {
   protected req: Request
   protected res: Response
   protected session: Session
+  protected db;
 
   protected needLogin = false
 
@@ -53,6 +55,7 @@ export default abstract class {
         return this.res.json({code:-401, error:'not login'});
       }
 
+      this.db = await DB.create();
       const result = await this.action()
       if(result){
         this.res.set('Content-Type', 'application/json')
@@ -116,7 +119,7 @@ export default abstract class {
   * get service
   * */
   protected buildService<T extends Service>(service: { new(...args): T }): T{
-    return new service(this.session);
+    return new service(this.db, this.session);
   }
 
   protected getParam(key?: string): any{

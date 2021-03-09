@@ -8,14 +8,18 @@ import util from './util';
 
 // import VueAnalytics from 'vue-analytics';
 
-
-import 'element-ui/lib/theme-chalk/index.css';
+// import 'element-ui/lib/theme-chalk/index.css';
+import './style/theme/index.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './style/index.scss';
+
+
 
 Vue.use(VueI18n)
 Vue.use(ElementUI);
+
+import './style/index.scss';
+
 Vue.config.productionTip = false;
 
 // Vue.use(VueAnalytics, {
